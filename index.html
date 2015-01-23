@@ -1,0 +1,402 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns:ng="http://angularjs.org">
+
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <link data-require="bootstrap@*" data-semver="3.3.1" rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css" />
+    <script data-require="jquery@1.11.0" data-semver="1.11.0" src="//cdnjs.cloudflare.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+    <link href="c3.min.css" rel="stylesheet" data-semver="0.1.29" data-require="c3.js@*" />
+    <script data-require="bootstrap@*" data-semver="3.3.1" src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
+    <script src="c3.min.js" data-semver="0.1.29" data-require="c3.js@*"></script>
+    <script src="https://code.angularjs.org/1.2.16/angular.js" data-semver="1.2.28" data-require="angular.js@*"></script>
+    <script data-require="ui-bootstrap@*" data-semver="0.12.0" src="http://angular-ui.github.io/bootstrap/ui-bootstrap-tpls-0.12.0.min.js"></script>
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/lodash.js/2.4.1/lodash.js" data-semver="2.4.1" data-require="lodash.js@*"></script>
+    <script data-require="d3@*" data-semver="3.4.6" src="//cdnjs.cloudflare.com/ajax/libs/d3/3.4.6/d3.min.js"></script>
+    <script data-require="html5shiv@*" data-semver="3.6.2" src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.6.2/html5shiv.js"></script>
+    <script data-require="html5shiv@*" data-semver="3.6.2" src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.6.2/html5shiv-printshiv.js"></script>
+    <script data-require="json3@*" data-semver="3.2.4" src="//cdnjs.cloudflare.com/ajax/libs/json3/3.2.4/json3.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/aight/1.2.2/aight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/aight/1.2.2/aight.d3.min.js"></script>
+    <link rel="stylesheet" href="style.css" />
+    <script src="angularjs-dropdown-multiselect.min.js"></script>
+    <script src="dates.js"></script>
+    <script src="app.js"></script>
+    <script src="controllers.js"></script>
+    <script src="directives.js"></script>
+    <script src="services.js"></script>
+    <script src="filters.js"></script>
+    <script>
+    if (!Array.prototype.forEach) {
+      Array.prototype.forEach = function(fn, scope) {
+        for (var i = 0, len = this.length; i < len; ++i) {
+          fn.call(scope, this[i], i, this);
+        }
+      }
+    }
+  </script>
+  </head>
+
+  <body id="ng-app" ng-app="app" ng-controller="controller" style="height: 100%;">
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <!--<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>-->
+          <a class="navbar-brand" href="#">Proportion of Days Covered (PDC) Calculator</a>
+        </div>
+        <div id="navbar" class="collapse navbar-collapse">
+          <!--<ul class="nav navbar-nav">
+            <li class="active"><a href="#">Home</a></li>
+            <li><a href="#about">About</a></li>
+            <li><a href="#contact">Contact</a></li>
+          </ul>-->
+        </div>
+      </div>
+    </nav>
+    <div class="container">
+      <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+        <div class="panel panel-default">
+          <div class="panel-heading" role="tab" id="headingOne">
+            <h3 class="panel-title">
+              <a data-toggle="collapse" data-target="#collapseOne" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">Options</a>
+            </h3>
+          </div>
+          <div id="collapseOne" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
+            <div class="panel-body">
+              <div class="col-xs-6">
+                <table>
+                  <tbody>
+                    <tr>
+                      <td>Measure:</td>
+                      <td>
+                        <p class="input-group"></p>
+                        <div ng-dropdown-multiselect="" selected-model="measures.model" options="measures.options" extra-settings="measures.settings" events="measures.events"></div>
+                        <p></p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>From:</td>
+                      <td>
+                        <div my-datepicker="fromDt" my-event="claimChanged()"></div>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>Thru:</td>
+                      <td>
+                        <div my-datepicker="thruDt" my-event="claimChanged()"></div>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>Continuous Enrollment:</td>
+                      <td>
+                        <div class="btn-group" ng-init="contEnroll = 1">
+                          <label class="btn btn-primary" ng-model="contEnroll" btn-radio="1">Eligibility</label>
+                          <label class="btn btn-primary" ng-model="contEnroll" btn-radio="0">Claims</label>
+                        </div>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              <div ng-if="dob.yearsFrom(thruDt) >= 18 &&
+                ((contEnroll && gap <= 31) || (!contEnroll && enrollment.span >= 150)) && 
+                adherence.uniqueDatesOfFill >= 2 && 
+                adherence.daysInMeasurementPeriod[thruNbr] >= 91 && 
+                (measures.model.id == 'Statin Medications' || !esrd) && 
+                (measures.model.id != 'Diabetes Medications' || !insulin)" class="col-xs-6">
+                <div class="col-offset-2">
+                  <div my-gauge my-value="{{adherence.pdc[thruNbr - fromNbr + 1] * 100}}"></div>
+                </div>
+                <div>Days in Measurement Period: {{adherence.daysInMeasurementPeriod[thruNbr]}}</div>
+                <div>Days Covered: {{adherence.daysCovered[thruNbr]}}</div>
+                <div>Proportion of Days Covered: {{adherence.pdc[thruNbr - fromNbr + 1] | percentage}}</div>
+                <div>Adherent: <span my-new-check="adherence.thresholdExceeded[thruNbr - fromNbr + 1]"></span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="panel panel-default">
+          <div class="panel-heading" role="tab" id="headingTwo">
+            <h3 class="panel-title">
+              <a data-toggle="collapse" data-target="#collapseTwo" data-parent="#accordion" href="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">Patient</a>
+            </h3>
+          </div>
+          <div id="collapseTwo" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingTwo">
+            <div class="panel-body">
+              <div class="col-xs-6">
+                <table>
+                  <tbody>
+                    <tr>
+                      <td>Date of Birth:</td>
+                      <td>
+                        <div my-datepicker="dob" my-event="claimChanged()"></div>
+                      </td>
+                    </tr>
+                    <tr ng-show="measures.model.id == 'Diabetes Medications'">
+                      <td>Patient on Insulin:</td>
+                      <td>
+                        <div class="btn-group" ng-init="insulin = 0">
+                          <label class="btn btn-primary" ng-model="insulin" btn-radio="1">Yes</label>
+                          <label class="btn btn-primary" ng-model="insulin" btn-radio="0">No</label>
+                        </div>
+                      </td>
+                    </tr>
+                    <tr ng-show="measures.model.id == 'Diabetes Medications' || measures.model.id == 'Renin Angiotensin System (RAS) Antagonists'">
+                      <td>Patient with End-Stage Renal Disease (ESRD):</td>
+                      <td>
+                        <div class="btn-group" ng-init="esrd = 0">
+                          <label class="btn btn-primary" ng-model="esrd" btn-radio="1">Yes</label>
+                          <label class="btn btn-primary" ng-model="esrd" btn-radio="0">No</label>
+                        </div>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              <div class="col-xs-6">
+                <div>Age: {{dob.yearsFrom(thruDt)}}</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div ng-show="contEnroll" class="panel panel-default">
+          <div class="panel-heading" role="tab" id="headingThree">
+            <h3 class="panel-title">
+              <a data-toggle="collapse" data-target="#collapseThree" data-parent="#accordion" href="#collapseThree" aria-expanded="true" aria-controls="collapseThree">Eligibility</a>
+            </h3>
+          </div>
+          <div id="collapseThree" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingThree">
+            <div class="panel-body">
+              <div class="col-xs-6">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Sequence</th>
+                      <th>From</th>
+                      <th>Thru</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr ng-repeat="date in elig">
+                      <td>
+                        <label class="form-control">{{date.seq}}</label>
+                        <p></p>
+                      </td>
+                      <td>
+                        <div my-datepicker="date.from" my-event="eligChanged()"></div>
+                      </td>
+                      <td>
+                        <div my-datepicker="date.thru" my-event="eligChanged()"></div>
+                      </td>
+                      <td>
+                        <button ng-click="removeElig(date)">Remove</button>
+                        <p></p>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+                <button ng-click="addElig()">Add</button>
+              </div>
+              <div class="col-xs-6">
+                <div>From: {{from | date: 'MMM d, y'}}</div>
+                <div>Thru: {{thru | date: 'MMM d, y'}}</div>
+                <div>Gap in Eligibility: {{gap + ' days'}}</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="panel panel-default">
+          <div class="panel-heading" role="tab" id="headingFour">
+            <h3 class="panel-title">
+              <a data-toggle="collapse" data-target="#collapseFour" data-parent="#accordion" href="#collapseFour" aria-expanded="true" aria-controls="collapseFour">Claims</a>
+            </h3>
+          </div>
+          <div id="collapseFour" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingFour">
+            <div class="panel-body">
+              <div class="col-xs-6">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Claim #</th>
+                      <th>Drug</th>
+                      <th>Date of Fill</th>
+                      <th>Days Supply</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr ng-repeat="claim in claims">
+                      <td>
+                        <label class="form-control">{{claim.number}}</label>
+                        <p></p>
+                      </td>
+                      <td>
+                        <div ng-dropdown-multiselect="" selected-model="claim.drug" options="drugs.options" group-by="category" extra-settings="drugs.settings" events="drugs.events"></div>
+                        <p></p>
+                      </td>
+                      <td>
+                        <div my-datepicker="claim.dateOfFill" my-event="claimChanged()"></div>
+                      </td>
+                      <td>
+                        <input class="form-control" ng-model="claim.daysSupply" ng-change="claimChanged()" />
+                        <p></p>
+                      </td>
+                      <td>
+                        <button ng-click="removeClaim(claim)">Remove</button>
+                        <p></p>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+                <button ng-click="addClaim()">Add</button>
+              </div>
+              <div class="col-xs-6">
+                <table class="table table-striped table-hover table-condensed">
+                  <thead>
+                    <tr>
+                      <th>Claim #</th>
+                      <th>Drug</th>
+                      <th>Date of Fill</th>
+                      <th>Days Supply</th>
+                      <th>Date of First Dose</th>
+                      <th>Date of Last Dose</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr ng-repeat="claim in adherence.claims">
+                      <td>{{claim.number}}</td>
+                      <td>{{claim.drug.id}}</td>
+                      <td>{{claim.daysSupply}}</td>
+                      <td>{{claim.dateOfFill | date: 'MMM d, y'}}</td>
+                      <td>{{claim.dateOfFillAdj | date: 'MMM d, y'}}</td>
+                      <td>{{claim.dateOfLastDose | date: 'MMM d, y'}}</td>
+                    </tr>
+                  </tbody>
+                </table>
+                <div>Index Date: {{adherence.indexDate | date: 'MMM d, y'}}</div>
+                <div>Unique Dates of Fill: {{adherence.uniqueDatesOfFill}}</div>
+                <div>Days in Measurement Period: {{adherence.daysInMeasurementPeriod[thruNbr]}}</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div ng-if="dob.yearsFrom(thruDt) < 18" class="panel panel-danger">
+          <div class="panel-heading" role="tab" id="headingFive">
+            <h3 class="panel-title">
+              <a data-toggle="collapse" data-target="#collapseFive" data-parent="#accordion" href="#collapseFive" aria-expanded="true" aria-controls="collapseFive">Must be 18 years and older as of the last day of the measurement period.</a>
+            </h3>
+          </div>
+        </div>
+        <div ng-if="(contEnroll && gap > 31) || (!contEnroll && enrollment.span < 150)" class="panel panel-danger">
+          <div class="panel-heading" role="tab" id="headingSix">
+            <h3 class="panel-title">
+              <a data-toggle="collapse" data-target="#collapseSix" data-parent="#accordion" href="#collapseSix" aria-expanded="true" aria-controls="collapseSix">Must be continuously enrolled during the measurement period.</a>
+            </h3>
+          </div>
+        </div>
+        <div ng-if="adherence.uniqueDatesOfFill < 2" class="panel panel-danger">
+          <div class="panel-heading" role="tab" id="headingSix">
+            <h3 class="panel-title">
+              <a data-toggle="collapse" data-target="#collapseSix" data-parent="#accordion" href="#collapseSix" aria-expanded="true" aria-controls="collapseSix">Must have at least two prescriptions on two unique dates of service in the measurement period.</a>
+            </h3>
+          </div>
+        </div>
+        <div ng-if="adherence.daysInMeasurementPeriod[thruNbr] < 91" class="panel panel-danger">
+          <div class="panel-heading" role="tab" id="headingSeven">
+            <h3 class="panel-title">
+              <a data-toggle="collapse" data-target="#collapseSeven" data-parent="#accordion" href="#collapseSeven" aria-expanded="true" aria-controls="collapseSeven">Index date must be at least 91 days before the end of the enrollment period.</a>
+            </h3>
+          </div>
+        </div>
+        <div ng-if="(measures.model.id == 'Diabetes Medications' || measures.model.id == 'Renin Angiotensin System (RAS) Antagonists') && esrd" class="panel panel-danger">
+          <div class="panel-heading" role="tab" id="headingEight">
+            <h3 class="panel-title">
+              <a data-toggle="collapse" data-target="#collapseEight" data-parent="#accordion" href="#collapseEights" aria-expanded="true" aria-controls="collapseEight">Patients with ESRD are excluded.</a>
+            </h3>
+          </div>
+        </div>
+        <div ng-if="measures.model.id == 'Diabetes Medications' && insulin" class="panel panel-danger">
+          <div class="panel-heading" role="tab" id="headingNine">
+            <h3 class="panel-title">
+              <a data-toggle="collapse" data-target="#collapseNine" data-parent="#accordion" href="#collapseNine" aria-expanded="true" aria-controls="collapseNine">Patients who have one or more prescriptions for insulin in the measurement period are excluded.</a>
+            </h3>
+          </div>
+        </div>
+      </div>
+  
+      <div class="btn-group">
+        <label class="btn btn-primary" ng-model="display" btn-radio="0">PDC</label>
+        <label class="btn btn-primary" ng-model="display" btn-radio="1">Overlap</label>
+        <label class="btn btn-primary" ng-model="display" btn-radio="2">Days Covered</label>
+      </div>
+      <div ng-show="display == 0" id="chart1"></div>
+      <div ng-show="display == 1" id="chart2"></div>
+      <div ng-show="display == 2" class="col-md-4 col-xs-6" style="max-height: 500px; overflow: auto;">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>Covered</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr ng-repeat="(key, val) in adherence.drugsCovered">
+              <td>{{toDate(key) | date: 'shortDate'}}</td>
+              <td class="text-center">
+                <span my-check="val"></span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <!--<div class="row">
+        <div class="col-md-8 col-md-offset-1">
+          <div ng-repeat="val1 in helpData">
+            <div ng-attr-id="{{val1.value}}">
+              <h3>
+                <div ng-bind-html="val1.value | highlight:search">{{val1.value}}</div>
+              </h3>
+              <div ng-repeat="val2 in val1.children">
+                <div ng-attr-id="{{val2.id}}" class="panel panel-default">
+                  <div class="panel-heading" ng-bind-html="val2.value | highlight:search"></div>
+                  <div class="panel-body">
+                    <div ng-repeat="val3 in val2.children">
+                      <p></p>
+                      <div ng-bind-html="val3.value | highlight:search"></div>
+                      <p></p>
+                      <ul ng-repeat="val4 in val3.children">
+                        <li ng-if="val4.type != 'image'">
+                          <div ng-bind-html="val4.value | highlight:search"></div>
+                        </li>
+                        <img ng-if="val4.type == 'image'" class="img-responsive" src="./assets/img/{{val4.value + '.jpg'}}" style="width:800px;height:250px" />
+                        <ul ng-repeat="val5 in val4.children">
+                          <li>
+                            <div ng-bind-html="val5.value | highlight:search"></div>
+                          </li>
+                        </ul>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <br />
+          </div>
+        </div>
+        <div class="col-md-2 col-md-offset-1 sidebar-offcanvas" role="navigation">
+          <div class="input-group">
+            <span class="input-group-addon glyphicon glyphicon-search"></span>
+            <input type="text" class="form-control" placeholder="Search" ng-model="search" />
+          </div>
+          <div class="list-group">
+            <a ng-repeat="val1 in helpData" ng-href="{{'#/help#' + val1.value}}" class="list-group-item">{{val1.value}}</a>
+          </div>
+        </div>
+      </div>-->
+    </div>
+  </body>
+
+</html>
