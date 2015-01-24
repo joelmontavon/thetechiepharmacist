@@ -222,7 +222,7 @@
                   <thead>
                     <tr>
                       <th>Claim #</th>
-                      <th>Drug</th>
+                      <th>Drug(s)</th>
                       <th>Date of Fill</th>
                       <th>Days Supply</th>
                     </tr>
@@ -258,7 +258,7 @@
                   <thead>
                     <tr>
                       <th>Claim #</th>
-                      <th>Drug</th>
+                      <th>Drug(s)</th>
                       <th>Date of Fill</th>
                       <th>Days Supply</th>
                       <th>Date of First Dose</th>
@@ -327,29 +327,33 @@
         </div>
       </div>
   
-      <div class="btn-group">
-        <label class="btn btn-primary" ng-model="display" btn-radio="2">Days Covered</label>
-        <label class="btn btn-primary" ng-model="display" btn-radio="1">Overlap</label>
-        <label class="btn btn-primary" ng-model="display" btn-radio="0">PDC</label>
+      <div class="row">
+        <div class="btn-group">
+          <label class="btn btn-primary" ng-model="display" btn-radio="2">Days Covered</label>
+          <label class="btn btn-primary" ng-model="display" btn-radio="1">Overlap</label>
+          <label class="btn btn-primary" ng-model="display" btn-radio="0">PDC</label>
+        </div>
       </div>
-      <div ng-show="display == 0 || display == 1" id="chart" style="height: 320px"></div>
-      <div ng-show="display == 2" class="col-md-4 col-xs-6" style="max-height: 320px; overflow: auto;">
-        <table class="table table-condensed">
-          <thead>
-            <tr>
-              <th>Date</th>
-              <th>Covered</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr ng-repeat="(key, val) in adherence.drugsCovered">
-              <td>{{toDate(key) | date: 'shortDate'}}</td>
-              <td class="text-center">
-                <span my-check="val"></span>
-              </td>
-            </tr>
-          </tbody>
-        </table>
+      <div class="row>"
+        <div ng-show="display == 0 || display == 1" id="chart" style="height: 320px"></div>
+        <div ng-show="display == 2" class="col-md-4 col-xs-6" style="max-height: 320px; overflow: auto;">
+          <table class="table table-condensed">
+            <thead>
+              <tr>
+                <th>Date</th>
+                <th>Covered</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr ng-repeat="(key, val) in adherence.drugsCovered">
+                <td>{{toDate(key) | date: 'shortDate'}}</td>
+                <td class="text-center">
+                  <span my-check="val"></span>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </div>
       <!--<div class="row">
         <div class="col-md-8 col-md-offset-1">
