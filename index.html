@@ -278,7 +278,7 @@
                 </table>
                 <div>Index Date: {{adherence.indexDate | date: 'MMM d, y'}}</div>
                 <div>Unique Dates of Fill: {{adherence.uniqueDatesOfFill}}</div>
-                <div>Days in Measurement Period: {{adherence.daysInMeasurementPeriod[thruNbr]}}</div>
+                <div>Days between First and Last Fill: {{adherence.span}}</div>
               </div>
             </div>
           </div>
@@ -286,56 +286,55 @@
         <div ng-if="dob.yearsFrom(thruDt) < 18" class="panel panel-danger">
           <div class="panel-heading" role="tab" id="headingFive">
             <h3 class="panel-title">
-              <a data-toggle="collapse" data-target="#collapseFive" data-parent="#accordion" href="#collapseFive" aria-expanded="true" aria-controls="collapseFive">Must be 18 years and older as of the last day of the measurement period.</a>
+              <div data-toggle="collapse" data-target="#collapseFive" data-parent="#accordion" href="#collapseFive" aria-expanded="true" aria-controls="collapseFive">Must be 18 years and older as of the last day of the measurement period.</div>
             </h3>
           </div>
         </div>
         <div ng-if="(contEnroll && gap > 31) || (!contEnroll && enrollment.span < 150)" class="panel panel-danger">
           <div class="panel-heading" role="tab" id="headingSix">
             <h3 class="panel-title">
-              <a data-toggle="collapse" data-target="#collapseSix" data-parent="#accordion" href="#collapseSix" aria-expanded="true" aria-controls="collapseSix">Must be continuously enrolled during the measurement period.</a>
+              <div data-toggle="collapse" data-target="#collapseSix" data-parent="#accordion" href="#collapseSix" aria-expanded="true" aria-controls="collapseSix">Must be continuously enrolled during the measurement period.</div>
             </h3>
           </div>
         </div>
         <div ng-if="adherence.uniqueDatesOfFill < 2" class="panel panel-danger">
           <div class="panel-heading" role="tab" id="headingSix">
             <h3 class="panel-title">
-              <a data-toggle="collapse" data-target="#collapseSix" data-parent="#accordion" href="#collapseSix" aria-expanded="true" aria-controls="collapseSix">Must have at least two prescriptions on two unique dates of service in the measurement period.</a>
+              <div data-toggle="collapse" data-target="#collapseSix" data-parent="#accordion" href="#collapseSix" aria-expanded="true" aria-controls="collapseSix">Must have at least two prescriptions on two unique dates of service in the measurement period.</div>
             </h3>
           </div>
         </div>
         <div ng-if="adherence.daysInMeasurementPeriod[thruNbr] < 91" class="panel panel-danger">
           <div class="panel-heading" role="tab" id="headingSeven">
             <h3 class="panel-title">
-              <a data-toggle="collapse" data-target="#collapseSeven" data-parent="#accordion" href="#collapseSeven" aria-expanded="true" aria-controls="collapseSeven">Index date must be at least 91 days before the end of the enrollment period.</a>
+              <div data-toggle="collapse" data-target="#collapseSeven" data-parent="#accordion" href="#collapseSeven" aria-expanded="true" aria-controls="collapseSeven">Index date must be at least 91 days before the end of the enrollment period.</div>
             </h3>
           </div>
         </div>
         <div ng-if="(measures.model.id == 'Diabetes Medications' || measures.model.id == 'Renin Angiotensin System (RAS) Antagonists') && esrd" class="panel panel-danger">
           <div class="panel-heading" role="tab" id="headingEight">
             <h3 class="panel-title">
-              <a data-toggle="collapse" data-target="#collapseEight" data-parent="#accordion" href="#collapseEights" aria-expanded="true" aria-controls="collapseEight">Patients with ESRD are excluded.</a>
+              <div data-toggle="collapse" data-target="#collapseEight" data-parent="#accordion" href="#collapseEights" aria-expanded="true" aria-controls="collapseEight">Patients with end-stage renal disease (ESRD) are excluded.</div>
             </h3>
           </div>
         </div>
         <div ng-if="measures.model.id == 'Diabetes Medications' && insulin" class="panel panel-danger">
           <div class="panel-heading" role="tab" id="headingNine">
             <h3 class="panel-title">
-              <a data-toggle="collapse" data-target="#collapseNine" data-parent="#accordion" href="#collapseNine" aria-expanded="true" aria-controls="collapseNine">Patients who have one or more prescriptions for insulin in the measurement period are excluded.</a>
+              <div data-toggle="collapse" data-target="#collapseNine" data-parent="#accordion" href="#collapseNine" aria-expanded="true" aria-controls="collapseNine">Patients who have one or more prescriptions for insulin in the measurement period are excluded.</div>
             </h3>
           </div>
         </div>
       </div>
   
       <div class="btn-group">
-        <label class="btn btn-primary" ng-model="display" btn-radio="0">PDC</label>
-        <label class="btn btn-primary" ng-model="display" btn-radio="1">Overlap</label>
         <label class="btn btn-primary" ng-model="display" btn-radio="2">Days Covered</label>
+        <label class="btn btn-primary" ng-model="display" btn-radio="1">Overlap</label>
+        <label class="btn btn-primary" ng-model="display" btn-radio="0">PDC</label>
       </div>
-      <div ng-show="display == 0" id="chart1"></div>
-      <div ng-show="display == 1" id="chart2"></div>
-      <div ng-show="display == 2" class="col-md-4 col-xs-6" style="max-height: 500px; overflow: auto;">
-        <table class="table">
+      <div ng-show="display == 0 || display == 1" id="chart" style="height: 320px"></div>
+      <div ng-show="display == 2" class="col-md-4 col-xs-6" style="max-height: 320px; overflow: auto;">
+        <table class="table table-condensed">
           <thead>
             <tr>
               <th>Date</th>

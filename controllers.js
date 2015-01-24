@@ -9,7 +9,7 @@ controllers.controller('controller', function($scope, $filter, $timeout, _, pdcS
   $scope.dob = Date.getWithOffsetForTimezone('1997-12-31');
   $scope.elig = [];
   $scope.claims = [];
-  $scope.display = 0;
+  $scope.display = 1;
   
   var measures = [{id:'Diabetes Medications', label:'Diabetes Medications'}, {id:'Renin Angiotensin System (RAS) Antagonists', label:'Renin Angiotensin System (RAS) Antagonists'}, {id:'Statin Medications', label:'Statin Medications'}];
   var eligCtr = 1000;

@@ -43,10 +43,11 @@ services.factory("graphService", ["$filter", "_",
     };
     var graph = function (adherence, from, thru, type) {
       type = type || 0;
+      var options = {};
       switch(type) {
         case 0: 
-          c3.generate({
-              bindto: '#chart1',
+         options = {
+              bindto: '#chart',
               data: {
                 x: 'x',
                 columns: [
@@ -76,13 +77,13 @@ services.factory("graphService", ["$filter", "_",
                   }
                 }
               }
-            });
+            };
           break;
         case 1: 
           var columns = _columns(adherence.claims, from, thru);
           var regions = _regions(adherence.claims, from, thru);
-          c3.generate({
-            bindto: '#chart2',
+          options = {
+            bindto: '#chart',
             data: {
               x: 'x',
               columns: columns,
@@ -136,9 +137,10 @@ services.factory("graphService", ["$filter", "_",
             line: {
               connectNull: true
             }
-          });
+          };
           break;
       }
+      if (options) return c3.generate(options);
     };
     return {
       graph: graph
@@ -160,7 +162,7 @@ services.factory("pdcService", ["_",
     };
     var _uniqueDatesOfFill = function (claims) {
       var uniq = _.uniq(claims, function (claim) {
-        return claim.dateOfFill;
+        return claim.dateOfFill.getDate();
       });
       return uniq.length;
     };
@@ -372,16 +374,6 @@ services.factory("drugsService", ["_", function(_) {
     {"id":"linagliptin","measure":"Diabetes Medications","category":"DPP-IV Inhibitors","label":"linagliptin"},
     {"id":"saxagliptin","measure":"Diabetes Medications","category":"DPP-IV Inhibitors","label":"saxagliptin"},
     {"id":"sitagliptin","measure":"Diabetes Medications","category":"DPP-IV Inhibitors","label":"sitagliptin"},
-    {"id":"insulin detemir","measure":"Diabetes Medications","category":"Human Insulins","label":"insulin detemir"},
-    {"id":"insulin glargine","measure":"Diabetes Medications","category":"Human Insulins","label":"insulin glargine"},
-    {"id":"insulin lispro","measure":"Diabetes Medications","category":"Human Insulins","label":"insulin lispro"},
-    {"id":"insulin lispro/insulin, protamine lispro, human","measure":"Diabetes Medications","category":"Human Insulins","label":"insulin lispro/insulin, protamine lispro, human"},
-    {"id":"insulin, aspart protamine, human/insulin, aspart, human","measure":"Diabetes Medications","category":"Human Insulins","label":"insulin, aspart protamine, human/insulin, aspart, human"},
-    {"id":"insulin, aspart, human","measure":"Diabetes Medications","category":"Human Insulins","label":"insulin, aspart, human"},
-    {"id":"insulin, glulisine, human","measure":"Diabetes Medications","category":"Human Insulins","label":"insulin, glulisine, human"},
-    {"id":"nph insulin, human","measure":"Diabetes Medications","category":"Human Insulins","label":"nph insulin, human"},
-    {"id":"nph insulin, human/regular insulin, human","measure":"Diabetes Medications","category":"Human Insulins","label":"nph insulin, human/regular insulin, human"},
-    {"id":"regular insulin, human","measure":"Diabetes Medications","category":"Human Insulins","label":"regular insulin, human"},
     {"id":"exenatide","measure":"Diabetes Medications","category":"Incretin Mimetic Agents","label":"exenatide"},
     {"id":"liraglutide","measure":"Diabetes Medications","category":"Incretin Mimetic Agents","label":"liraglutide"},
     {"id":"nateglinide","measure":"Diabetes Medications","category":"Meglitinides","label":"nateglinide"},
