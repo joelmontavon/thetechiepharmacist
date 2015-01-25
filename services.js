@@ -70,6 +70,13 @@ services.factory("graphService", ["$filter", "_",
                   }
                 }
               },
+              grid: {
+                y: {
+                  lines: [
+                    {value: .8, text: 'Adherent'}
+                  ]
+                }
+              },
               tooltip: {
                 format: {
                   title: function (d) { 

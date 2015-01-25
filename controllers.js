@@ -61,7 +61,18 @@ controllers.controller('controller', function($scope, $filter, $timeout, _, pdcS
     }
   };
   
-  $scope.addElig();
+  $scope.clearElig = function () {
+    $scope.elig = [];
+    eligCtr = 1000;
+    $scope.addElig();      
+  };
+  
+  $scope.elig = [
+    {seq: '001', from: Date.getWithOffsetForTimezone('2015-01-01'), thru: Date.getWithOffsetForTimezone('2015-12-31')}
+  ];
+  eligCtr = 1001;
+  $scope.eligChanged();
+  //$scope.addElig();
   
 	$scope.drugs = {
     options: drugsService.getDrugs($scope.measures.model.id),
@@ -83,7 +94,7 @@ controllers.controller('controller', function($scope, $filter, $timeout, _, pdcS
     $timeout (function () {
       $scope.adherence = pdcService.adherence($scope.claims, $scope.fromNbr, $scope.thruNbr);
       $scope.graph = graphService.graph($scope.adherence, $scope.fromNbr, $scope.thruNbr, $scope.display);
-      //console.log($scope.adherence);
+      console.log($scope.adherence);
     });
   };
   
@@ -113,7 +124,15 @@ controllers.controller('controller', function($scope, $filter, $timeout, _, pdcS
     $scope.addClaim();      
   };
 
-  $scope.clearClaims();
+  $scope.claims = [
+    {number: '001', drug: {id:'metformin'}, dateOfFill: Date.getWithOffsetForTimezone('2015-07-06'), daysSupply: 30},
+    {number: '002', drug: {id:'metformin'}, dateOfFill: Date.getWithOffsetForTimezone('2015-8-15'), daysSupply: 30},
+    {number: '003', drug: {id:'metformin'}, dateOfFill: Date.getWithOffsetForTimezone('2015-9-22'), daysSupply: 30},
+    {number: '004', drug: {id:'metformin'}, dateOfFill: Date.getWithOffsetForTimezone('2015-10-19'), daysSupply: 30}
+  ];
+  claimsCtr = 1004;
+  $scope.claimChanged();
+  //$scope.clearClaims();
   
   $scope.$watch ('display', function () {
     $timeout(function () { 

@@ -1,3 +1,9 @@
+Date.prototype.stdTimezoneOffset = function() {
+    var jan = new Date(this.getFullYear(), 0, 1);
+    var jul = new Date(this.getFullYear(), 6, 1);
+    return Math.max(jan.getTimezoneOffset(), jul.getTimezoneOffset());
+}
+
 Date.prototype.addDays = function(days) {
     this.setDate(this.getDate() + days);
     return this;
@@ -17,7 +23,7 @@ Date.prototype.yearsFrom = function(date) {
 };
 
 Date.prototype.offsetForTimezone = function() {
-    this.setTime(this.getTime() + this.getTimezoneOffset()*60*1000);
+    this.setTime(this.getTime() + this.stdTimezoneOffset()*60*1000);
     return this;
 };
 
