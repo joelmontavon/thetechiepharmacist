@@ -187,7 +187,7 @@ services.factory("pdcService", ["_",
       var uniq = _.uniq(claims, function (claim) {
         return claim.dateOfFill.toDateString();
       });
-      console.log(uniq);
+      //console.log(uniq);
       return uniq.length;
     };
     var _span = function (claims) {
