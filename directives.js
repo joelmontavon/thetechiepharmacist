@@ -111,7 +111,7 @@ directives.directive('myGauge', function factory() {
     					pattern: ['#FF0000', '#F97600', '#F6C600', '#60B044'],
     					threshold: {
     						max: 100,
-    						values: [60, 70, 80, 90, 100]
+    						values: [60, 70, 80, 90]
     					}
     				},
     				tooltip: {

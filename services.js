@@ -4,20 +4,29 @@ services.factory("_", function() {
 });
 services.factory("graphService", ["$filter", "_",
   function($filter, _) {
-    var _columns = function (claims, from, thru) {
+    var _columns = function (claims) {
       var data = [];
       var ctr = claims.length;
       var xaxis = ['x'];
-      for (var i = from; i <= thru; i++) {
+      var from = _.reduce(claims, function (memo, claim) {
+        var dt = claim.dateOfFill.getDaysFromEpoch();
+        return dt < memo ? dt : memo;
+      }, Infinity);
+      var thru = _.reduce(claims, function (memo, claim) {
+        var dt = claim.dateOfLastDose.getDaysFromEpoch();
+        return dt > memo ? dt : memo;
+      }, -Infinity);
+      for (var i = from; i <= thru + 1; i++) {
         xaxis.push(Date.getWithDaysFromEpoch(i));
       }
       data.push(xaxis);
       claims.forEach(function (claim) {
         var values = ['Claim #' + claim.number];
-        for (var i = from; i <= thru; i++) {
-          if (i == claim.dateOfFill.getDaysFromEpoch() || 
-            i == claim.dateOfFillAdj.getDaysFromEpoch() || 
-            i == claim.dateOfLastDose.getDaysFromEpoch()) {
+        for (var i = from; i <= thru + 1; i++) {
+          var dt = Date.getWithDaysFromEpoch(i).toDateString();
+          if (dt == claim.dateOfFill.toDateString() || 
+            dt == claim.dateOfFillAdj.toDateString() || 
+            dt == claim.dateOfLastDose.toDateString()) {
             values.push(ctr);
           } else {
             values.push(null);
@@ -28,7 +37,7 @@ services.factory("graphService", ["$filter", "_",
       });
       return data;
     };
-    var _regions = function (claims, from, thru) {
+    var _regions = function (claims) {
       var result = {};
       var ctr = claims.length;
       claims.forEach(function (claim) {
@@ -59,7 +68,7 @@ services.factory("graphService", ["$filter", "_",
                 x: {
                   type: 'timeseries',
                   tick: {
-                    format: '%m-%y'
+                    format: '%m-%d-%y'
                   }
                 },
                 y: {
@@ -70,10 +79,17 @@ services.factory("graphService", ["$filter", "_",
                   }
                 }
               },
+              tooltip: {
+                format: {
+                    name: function (name, ratio, id, index) { 
+                      return 'PDC'; 
+                    }
+                }
+              },
               grid: {
                 y: {
                   lines: [
-                    {value: .8, text: 'Adherent'}
+                    {value: 0.8, text: 'Adherent'}
                   ]
                 }
               },
@@ -87,8 +103,8 @@ services.factory("graphService", ["$filter", "_",
             };
           break;
         case 1: 
-          var columns = _columns(adherence.claims, from, thru);
-          var regions = _regions(adherence.claims, from, thru);
+          var columns = _columns(adherence.claims);
+          var regions = _regions(adherence.claims);
           options = {
             bindto: '#chart',
             data: {
@@ -100,7 +116,7 @@ services.factory("graphService", ["$filter", "_",
               x: {
                 type: 'timeseries',
                 tick: {
-                  format: '%m/%y'
+                  format: '%m-%d-%y'
                 }
               },
               y: {
@@ -169,8 +185,9 @@ services.factory("pdcService", ["_",
     };
     var _uniqueDatesOfFill = function (claims) {
       var uniq = _.uniq(claims, function (claim) {
-        return claim.dateOfFill.getDate();
+        return claim.dateOfFill.toDateString();
       });
+      console.log(uniq);
       return uniq.length;
     };
     var _span = function (claims) {

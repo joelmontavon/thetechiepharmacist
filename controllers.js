@@ -68,7 +68,7 @@ controllers.controller('controller', function($scope, $filter, $timeout, _, pdcS
   };
   
   $scope.elig = [
-    {seq: '001', from: Date.getWithOffsetForTimezone('2015-01-01'), thru: Date.getWithOffsetForTimezone('2015-12-31')}
+    {seq: '001', from: Date.getWithOffsetForTimezone('2015-01-01'), thru: Date.getWithOffsetForTimezone('2015-06-30')}
   ];
   eligCtr = 1001;
   $scope.eligChanged();
@@ -94,7 +94,7 @@ controllers.controller('controller', function($scope, $filter, $timeout, _, pdcS
     $timeout (function () {
       $scope.adherence = pdcService.adherence($scope.claims, $scope.fromNbr, $scope.thruNbr);
       $scope.graph = graphService.graph($scope.adherence, $scope.fromNbr, $scope.thruNbr, $scope.display);
-      console.log($scope.adherence);
+      //console.log($scope.adherence);
     });
   };
   
@@ -125,12 +125,16 @@ controllers.controller('controller', function($scope, $filter, $timeout, _, pdcS
   };
 
   $scope.claims = [
-    {number: '001', drug: {id:'metformin'}, dateOfFill: Date.getWithOffsetForTimezone('2015-07-06'), daysSupply: 30},
-    {number: '002', drug: {id:'metformin'}, dateOfFill: Date.getWithOffsetForTimezone('2015-8-15'), daysSupply: 30},
-    {number: '003', drug: {id:'metformin'}, dateOfFill: Date.getWithOffsetForTimezone('2015-9-22'), daysSupply: 30},
-    {number: '004', drug: {id:'metformin'}, dateOfFill: Date.getWithOffsetForTimezone('2015-10-19'), daysSupply: 30}
+    {number: '001', drug: {id:'metformin'}, dateOfFill: Date.getWithOffsetForTimezone('2015-01-06'), daysSupply: 30},
+    {number: '002', drug: {id:'glyburide'}, dateOfFill: Date.getWithOffsetForTimezone('2015-01-06'), daysSupply: 30},
+    {number: '003', drug: {id:'metformin'}, dateOfFill: Date.getWithOffsetForTimezone('2015-02-15'), daysSupply: 30},
+    {number: '004', drug: {id:'glyburide'}, dateOfFill: Date.getWithOffsetForTimezone('2015-02-15'), daysSupply: 30},
+    {number: '005', drug: {id:'glyburide/metformin'}, dateOfFill: Date.getWithOffsetForTimezone('2015-02-28'), daysSupply: 30},
+    {number: '006', drug: {id:'glyburide/metformin'}, dateOfFill: Date.getWithOffsetForTimezone('2015-03-30'), daysSupply: 30},
+    {number: '007', drug: {id:'glyburide/metformin'}, dateOfFill: Date.getWithOffsetForTimezone('2015-04-28'), daysSupply: 30},
+    {number: '008', drug: {id:'glyburide/metformin'}, dateOfFill: Date.getWithOffsetForTimezone('2015-05-25'), daysSupply: 30}
   ];
-  claimsCtr = 1004;
+  claimsCtr = 1008;
   $scope.claimChanged();
   //$scope.clearClaims();
   
