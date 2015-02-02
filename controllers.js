@@ -40,6 +40,7 @@ controllers.controller('controller', function($scope, $filter, $timeout, _, pdcS
       $scope.thru = Date.getWithDaysFromEpoch($scope.thruNbr);
       var dates = eligService.eligDates($scope.elig);
       $scope.gap = eligService.gap(dates, $scope.fromNbr, $scope.thruNbr);
+      $scope.claimChanged();
     })
   };
   

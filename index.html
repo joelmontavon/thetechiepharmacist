@@ -27,14 +27,16 @@
     <script src="services.js"></script>
     <script src="filters.js"></script>
     <script>
-    if (!Array.prototype.forEach) {
-      Array.prototype.forEach = function(fn, scope) {
-        for (var i = 0, len = this.length; i < len; ++i) {
-          fn.call(scope, this[i], i, this);
+      window.console = window.console || {};
+      window.console.log = window.console.log || function() {};
+      if (!Array.prototype.forEach) {
+        Array.prototype.forEach = function(fn, scope) {
+          for (var i = 0, len = this.length; i < len; ++i) {
+            fn.call(scope, this[i], i, this);
+          }
         }
       }
-    }
-  </script>
+    </script>
   </head>
 
   <body id="ng-app" ng-app="app" ng-controller="controller" style="height: 100%;">
@@ -104,7 +106,7 @@
                 </table>
               </div>
               <div ng-if="dob.yearsFrom(thruDt) >= 18 &&
-                ((contEnroll && gap <= 31) || (!contEnroll && enrollment.span >= 150)) && 
+                ((contEnroll && gap <= 31) || (!contEnroll && adherence.span >= 150)) && 
                 adherence.uniqueDatesOfFill >= 2 && 
                 adherence.daysInMeasurementPeriod[thruNbr] >= 91 && 
                 (measures.model.id == 'Statin Medications' || !esrd) && 
@@ -293,7 +295,7 @@
             </h3>
           </div>
         </div>
-        <div ng-if="(contEnroll && gap > 31) || (!contEnroll && enrollment.span < 150)" class="panel panel-danger">
+        <div ng-if="(contEnroll && gap > 31) || (!contEnroll && adherence.span < 150)" class="panel panel-danger">
           <div class="panel-heading" role="tab" id="headingSix">
             <h3 class="panel-title">
               <div data-toggle="collapse" data-target="#collapseSix" data-parent="#accordion" href="#collapseSix" aria-expanded="true" aria-controls="collapseSix">Must be continuously enrolled during the measurement period.</div>
