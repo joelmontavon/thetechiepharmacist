@@ -1136,7 +1136,7 @@ services.factory("stars", ["$filter", "pivot", "_",
 		var result = {};
 		var sortedArr = [];
 		if (!measure || measure.higherIsBetter) {
-			sortedArr = _.sortBy(_.filter(arr, function (val) {return _.isNumber(val[key]);}), function (item) { if(_.isNumber(item[key])) {return item[key].toLocaleString('en-IN', {minimumFractionDigits: 2});} else {return item[key];}});
+			sortedArr = _.sortBy(_.filter(arr, function (val) {return _.isNumber(val[key]);}), key);
 		} else {
 			sortedArr = _.sortBy(_.filter(arr, function (val) {return _.isNumber(val[key]);}), function (item) {return -item[key];});
 		}
