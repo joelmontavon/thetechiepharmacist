@@ -1,0 +1,126 @@
+<div class="container-fluid">
+	<div class="sidebar">
+		<div class="btn-group-vertical" role="group">
+			<label class="btn btn-primary" ng-model="view" btn-radio="'Contract'" ng-change="">Contract vs Contract</label>
+			<label class="btn btn-primary" ng-model="view" btn-radio="'Year'" ng-change="">Year vs Year</label>
+			<label class="btn btn-primary" ng-model="view" btn-radio="'Benchmark'" ng-change="">Contract vs Benchmark</label>
+		</div>
+	</div>
+	<div class="main">
+		<div class="col-md-10 col-md-offset-2">
+			<table class="row table table-bordered table-striped table-hover table-condensed">
+				<thead>
+				  <tr>
+					<th colspan="2">
+						<div class="col-md-8">
+							<div class="btn-group btn-group-justified">
+								<div>
+									<div class="btn-group btn-group-justified">
+										<label class="btn btn-default" ng-model="selected1.contractType" btn-radio="'MA-PD'" ng-change="selectionChanged()">MA-PD</label>
+										<label class="btn btn-default" ng-model="selected1.contractType" btn-radio="'PDP'" ng-change="selectionChanged()">PDP</label>
+									</div>
+								</div>	
+								<ui-select ng-if="view != 'Year'" ng-model="selected1.year" on-select="selectionChanged()">
+								  <ui-select-match placeholder="Select a year...">{{$select.selected.yearStr}}</ui-select-match>
+								  <ui-select-choices repeat="item in years track by $index">
+									<div ng-bind-html="item.yearStr | highlight: $select.search"></div>
+								  </ui-select-choices>
+								</ui-select>
+								<ui-select ng-if="view == 'Year'" multiple ng-model="selected1.contracts" on-select="selectionChanged()" on-remove="selectionChanged()">
+								  <ui-select-match placeholder="Select a contract...">{{$item['Contract Number']}}</ui-select-match>
+								  <ui-select-choices repeat="item in scoresData | filter: {'Contract Type': selected1.contractType} | filter: {'Year': selected1.year.yearNbr} | filter: $select.search track by $index">
+									<div ng-bind-html="item['Contract Number'] | highlight: $select.search"></div>
+									<small>{{item['Organization Marketing Name']}}</small>
+								  </ui-select-choices>
+								</ui-select>
+							</div>
+						</div>							
+					</th>
+					<th colspan="2"></th>
+					<th colspan="2" class="text-center" style="border-top:none; border-left:none; border-right:none;">
+						<span ng-if="view != 'Benchmark'">{{view}} 1: </span>
+						<span ng-if="view == 'Benchmark'">Contract: </span>
+						<ui-select ng-if="view == 'Year'" ng-model="selected1.year" on-select="selectionChanged()">
+						  <ui-select-match placeholder="Select a year...">{{$select.selected.yearStr}}</ui-select-match>
+						  <ui-select-choices repeat="item in years track by $index">
+							<div ng-bind-html="item.yearStr | highlight: $select.search"></div>
+						  </ui-select-choices>
+						</ui-select>
+						<ui-select ng-if="view == 'Contract' || view == 'Benchmark'" multiple ng-model="selected1.contracts" on-select="selectionChanged()" on-remove="selectionChanged()">
+						  <ui-select-match placeholder="Select a contract...">{{$item['Contract Number']}}</ui-select-match>
+						  <ui-select-choices repeat="item in scoresData | filter: {'Contract Type': selected1.contractType} | filter: {'Year': selected1.year.yearNbr} | filter: $select.search track by $index">
+							<div ng-bind-html="item['Contract Number'] | highlight: $select.search"></div>
+							<small>{{item['Organization Marketing Name']}}</small>
+						  </ui-select-choices>
+						</ui-select>
+					</th>
+					<th colspan="2" class="text-center table-col-top">
+						<span ng-if="view != 'Benchmark'">{{view}} 2: </span>
+						<span ng-if="view == 'Benchmark'">Benchmark: </span>
+						<ui-select ng-if="view == 'Year'" ng-model="selected2.year" on-select="selectionChanged()">
+						  <ui-select-match placeholder="Select a year...">{{$select.selected.yearStr}}</ui-select-match>
+						  <ui-select-choices repeat="item in years track by $index">
+							<div ng-bind-html="item.yearStr | highlight: $select.search"></div>
+						  </ui-select-choices>
+						</ui-select>
+						<ui-select ng-if="view == 'Contract'" multiple ng-model="selected2.contracts" on-select="selectionChanged()" on-remove="selectionChanged()">
+						  <ui-select-match placeholder="Select a contract...">{{$item['Contract Number']}}</ui-select-match>
+						  <ui-select-choices repeat="item in scoresData | filter: {'Contract Type': selected1.contractType} | filter: {'Year': selected1.year.yearNbr} | filter: $select.search track by $index">
+							<div ng-bind-html="item['Contract Number'] | highlight: $select.search"></div>
+							<small>{{item['Organization Marketing Name']}}</small>
+						  </ui-select-choices>
+						</ui-select>
+						<ui-select ng-if="view == 'Benchmark'" ng-model="selected1.benchmark" on-select="selectionChanged()" on-remove="selectionChanged()">
+						  <ui-select-match placeholder="Select a benchmark...">{{$select.selected['organizationType']}}</ui-select-match>
+						  <ui-select-choices repeat="item in benchmarks | filter: {'contractType': selected1.contractType} | filter: $select.search track by $index">
+							<div ng-if="!item['isOrganizationType']">{{item['contractType'] | highlight: $select.search}}</div>
+							<div ng-if="item['isOrganizationType']" style="margin-left:10px;"><small>{{item['organizationType'] | highlight: $select.search}}</small></div>
+						  </ui-select-choices>
+						</ui-select>
+					</th>
+					<th></th>
+				  </tr>
+				  <tr>
+					<th class="col-md-1">Measure ID</th>
+					<th class="col-md-3">Measure</th>
+					<th class="col-md-2">Period</th>
+					<th class="col-md-1">Weighting</th>
+					<th class="text-center col-md-1">Score</th>
+					<th class="text-center col-md-1">Stars</th>
+					<th class="text-center col-md-1">Score</th>
+					<th class="text-center col-md-1">Stars</th>
+					<th class="col-md-1"></th>
+				  </tr>
+				</thead>
+				<tbody>
+					<tr ng-repeat="measure in measuresData[selected1.year.yearNbr][selected1.contractType] | orderByMeasureID">
+					  <td>{{measure['Measure ID']}}</td>
+					  <td>{{measure.Measure}}</td>
+					  <td>{{measure.Period}}</td>
+					  <td>{{measure.Weighting}}</td>
+					  <td ng-if="measure.Measure != 'Call Center – Pharmacy Hold Time' && measure.Measure != 'Drug Plan Quality Improvement'" class="table-col-mid-left"><input ng-model="scores1Pivot.values[measure.Measure]" class="form-control"></input></td>
+					  <td ng-if="measure.Measure == 'Call Center – Pharmacy Hold Time' || measure.Measure == 'Drug Plan Quality Improvement'" class="table-col-mid-left"><input class="form-control" disabled></input></td>
+					  <td ng-click="rowSelected(measure.Measure)" class="table-col-mid-right"><span my-stars="measureStars(scores1Pivot.values[measure.Measure], stars1Pivot.values[measure.Measure], measure.Measure, selected1.contractType, selected1.year.yearNbr, measuresData)" toggle="tooltip" placement="right" title="{{displayThresholds(measure.Measure, selected1.contractType, selected1.year.yearNbr, measuresData)}}"></span></td>
+					  <td ng-if="measure.Measure != 'Call Center – Pharmacy Hold Time' && measure.Measure != 'Drug Plan Quality Improvement'" class="table-col-mid-left"><input ng-model="scores2Pivot.values[measure.Measure]" class="form-control"></input></td>
+					  <td ng-if="measure.Measure == 'Call Center – Pharmacy Hold Time' || measure.Measure == 'Drug Plan Quality Improvement'" class="table-col-mid-left"><input class="form-control" disabled></input></td>
+					  <td class="table-col-mid-right"><span my-stars="measureStars(scores2Pivot.values[measure.Measure], stars2Pivot.values[measure.Measure], measure.Measure, selected2.contractType, selected2.year.yearNbr, measuresData)" toggle="tooltip" placement="right" title="{{displayThresholds(measure.Measure, selected1.contractType, selected1.year.yearNbr, measuresData)}}"></span></td>
+					  <td><span class="glyphicon glyphicon-stats" ng-click="openModal(measure)"></span><span class="glyphicon glyphicon-link"></span></td>
+					  <!--<td><span ng-repeat="item in displayThresholds(measure.Measure, selected1.contractType, selected1.year.yearNbr, measuresData)" ng-if="$index == 0">1 Star:{{item}}</span><span ng-repeat="item in displayThresholds(measure.Measure, selected1.contractType, selected1.year.yearNbr, measuresData) track by $index" ng-if="$index != 0">; {{$index + 1}} Stars:{{item}}</span></td>-->
+					</tr>
+				</tbody>
+				<tfoot>
+					<tr>
+					  <th colspan="4">Summary Part D Rating</th>
+					  <td></td>
+					  <td>{{summaryStars(scores1Pivot.values, stars1Pivot.values, selected1.contractType, selected1.year.yearNbr, measuresData) + iFactor(scores1Pivot.values, stars1Pivot.values, selected1.contractType, selected1.year.yearNbr, measuresData, iFactorData) | number: 2}}</td>
+					  <td></td>
+					  <td>{{summaryStars(scores2Pivot.values, stars2Pivot.values, selected2.contractType, selected2.year.yearNbr, measuresData) + iFactor(scores2Pivot.values, stars2Pivot.values, selected2.contractType, selected2.year.yearNbr, measuresData, iFactorData) | number: 2}}</td>
+					  <td></td>
+					</tr>
+				</tfoot>
+			</table>
+		</div>
+	</div></br></br>
+	<div id="chart2"></div>
+  </div>
+</div>

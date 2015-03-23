@@ -1,0 +1,298 @@
+  <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+	<div class="panel panel-default">
+	  <div class="panel-heading" role="tab" id="headingOne">
+		<h3 class="panel-title">
+		  <a data-toggle="collapse" data-target="#collapseOne" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">Options</a>
+		</h3>
+	  </div>
+	  <div id="collapseOne" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
+		<div class="panel-body">
+		  <div class="col-xs-6">
+			<table>
+			  <tbody>
+				<tr>
+				  <td>From:</td>
+				  <td>
+					<div my-datepicker="fromDt" my-event="claimChanged()"></div>
+				  </td>
+				</tr>
+				<tr>
+				  <td>Thru:</td>
+				  <td>
+					<div my-datepicker="thruDt" my-event="claimChanged()"></div>
+				  </td>
+				</tr>
+				<tr>
+				  <td>Continuous Enrollment:</td>
+				  <td>
+					<div class="btn-group" ng-init="contEnroll = 1">
+					  <label class="btn btn-primary" ng-model="contEnroll" btn-radio="1">Eligibility</label>
+					  <label class="btn btn-primary" ng-model="contEnroll" btn-radio="0">Claims</label>
+					</div>
+				  </td>
+				</tr>
+			  </tbody>
+			</table>
+		  </div>
+		  <div ng-if="opioids.consecutive >= 90" class="col-xs-6">
+			<div>High Dosage <span class="glyphicon glyphicon-thumbs-down" style="color:yellow;font-size:xx-large;font-weight:bold;"></span></div>
+		  </div>
+		  <div ng-if="opioids.prescribers >= 4 && opioids.pharmacies >= 4" class="col-xs-6">
+			<div>Multiple Prescribers and Multiple Pharmacies <span class="glyphicon glyphicon-thumbs-down" style="color:yellow;font-size:xx-large;font-weight:bold;"></span></div>
+		  </div>
+		  <div ng-if="opioids.prescribers >= 4 && opioids.pharmacies >= 4 && opioids.consecutive >= 90" class="col-xs-6">
+			<div>Multi-Provider, High Dosage <span class="glyphicon glyphicon-thumbs-down" style="color:red;font-size:xx-large;font-weight:bold;"></span></div>
+		  </div>
+		  <div ng-if="opioids.prescribers < 4 && opioids.pharmacies < 4 && opioids.consecutive < 90" class="col-xs-6">
+			<div><span class="glyphicon glyphicon-thumbs-up" style="color:green;font-size:xx-large;font-weight:bold;"></span></div>
+		  </div>
+		</div>
+	  </div>
+	</div>
+	<div class="panel panel-default">
+	  <div class="panel-heading" role="tab" id="headingTwo">
+		<h3 class="panel-title">
+		  <a data-toggle="collapse" data-target="#collapseTwo" data-parent="#accordion" href="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">Patient</a>
+		</h3>
+	  </div>
+	  <div id="collapseTwo" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingTwo">
+		<div class="panel-body">
+		  <div class="col-xs-6">
+			<table>
+			  <tbody>
+				<tr>
+				  <td>Date of Birth:</td>
+				  <td>
+					<div my-datepicker="dob" my-event="claimChanged()"></div>
+				  </td>
+				</tr>
+				<tr>
+				  <td>Patient has cancer:</td>
+				  <td>
+					<div class="btn-group" ng-init="cancer = 0">
+					  <label class="btn btn-primary" ng-model="cancer" btn-radio="1">Yes</label>
+					  <label class="btn btn-primary" ng-model="cancer" btn-radio="0">No</label>
+					</div>
+				  </td>
+				</tr>
+				<tr>
+				  <td>Patient is in Hospice:</td>
+				  <td>
+					<div class="btn-group" ng-init="hospice = 0">
+					  <label class="btn btn-primary" ng-model="hospice" btn-radio="1">Yes</label>
+					  <label class="btn btn-primary" ng-model="hospice" btn-radio="0">No</label>
+					</div>
+				  </td>
+				</tr>
+			  </tbody>
+			</table>
+		  </div>
+		  <div class="col-xs-6">
+			<div>Age: {{dob.yearsFrom(thruDt)}}</div>
+		  </div>
+		</div>
+	  </div>
+	</div>
+	<div ng-show="contEnroll" class="panel panel-default">
+	  <div class="panel-heading" role="tab" id="headingThree">
+		<h3 class="panel-title">
+		  <a data-toggle="collapse" data-target="#collapseThree" data-parent="#accordion" href="#collapseThree" aria-expanded="true" aria-controls="collapseThree">Eligibility</a>
+		</h3>
+	  </div>
+	  <div id="collapseThree" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingThree">
+		<div class="panel-body">
+		  <div class="col-xs-6">
+			<table>
+			  <thead>
+				<tr>
+				  <th>Sequence</th>
+				  <th>From</th>
+				  <th>Thru</th>
+				</tr>
+			  </thead>
+			  <tbody>
+				<tr ng-repeat="date in elig">
+				  <td>
+					<label class="form-control">{{date.seq}}</label>
+					<p></p>
+				  </td>
+				  <td>
+					<div my-datepicker="date.from" my-event="eligChanged()"></div>
+				  </td>
+				  <td>
+					<div my-datepicker="date.thru" my-event="eligChanged()"></div>
+				  </td>
+				  <td>
+					<button ng-click="removeElig(date)">Remove</button>
+					<p></p>
+				  </td>
+				</tr>
+			  </tbody>
+			</table>
+			<button ng-click="addElig()">Add</button>
+			<button ng-click="clearElig()">Clear</button>
+		  </div>
+		  <div class="col-xs-6">
+			<div>From: {{from | date: 'MMM d, y'}}</div>
+			<div>Thru: {{thru | date: 'MMM d, y'}}</div>
+			<div>Gap in Eligibility: {{gap + ' days'}}</div>
+		  </div>
+		</div>
+	  </div>
+	</div>
+	<div class="panel panel-default">
+	  <div class="panel-heading" role="tab" id="headingFour">
+		<h3 class="panel-title">
+		  <a data-toggle="collapse" data-target="#collapseFour" data-parent="#accordion" href="#collapseFour" aria-expanded="true" aria-controls="collapseFour">Claims</a>
+		</h3>
+	  </div>
+	  <div id="collapseFour" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingFour">
+		<div class="panel-body">
+		  <div class="col-xs-12">
+			<table>
+			  <thead>
+				<tr>
+				  <th>Claim #</th>
+				  <th>Drug(s)</th>
+				  <th>Date of Fill</th>
+				  <th>Quantity</th>
+				  <th>Days Supply</th>
+				</tr>
+			  </thead>
+			  <tbody>
+				<tr ng-repeat="claim in claims">
+				  <td>
+					<label class="form-control">{{claim.number}}</label>
+					<p></p>
+				  </td>
+				  <td>
+					<!--<div ng-dropdown-multiselect="" selected-model="claim.drug" options="drugs.options" group-by="category" extra-settings="drugs.settings" events="drugs.events"></div>-->
+					<ui-select ng-model="claim.drug" on-select="drugSelected(claim)"  style="width: 500px;">
+					  <!--<ui-select-match placeholder="Select a drug...">{{$select.selected.fullName.substring(0,10).trim() + '...'}}</ui-select-match>-->
+					  <ui-select-match placeholder="Select a drug...">{{$select.selected.fullName}}</ui-select-match>
+					  <ui-select-choices repeat="drug in drugs | multifilter: $select.search | limitTo: 20 track by drug.rxcui">
+						<div ng-bind-html="drug.fullName | highlight: $select.search"></div>
+					  </ui-select-choices>
+					</ui-select>
+					<p></p>
+				  </td>
+				  <td>
+					<div my-datepicker="claim.dateOfFill" my-event="claimChanged()"></div>
+				  </td>
+				  <td>
+					<input class="form-control" ng-model="claim.qty" ng-change="claimChanged()" />
+					<p></p>
+				  </td>
+				  <td>
+					<input class="form-control" ng-model="claim.daysSupply" ng-change="claimChanged()" />
+					<p></p>
+				  </td>
+				  <td>
+					<input class="form-control" ng-model="claim.md" ng-change="claimChanged()" />
+					<p></p>
+				  </td>
+				  <td>
+					<input class="form-control" ng-model="claim.pharm" ng-change="claimChanged()" />
+					<p></p>
+				  </td>
+				  <td>
+					<button ng-click="removeClaim(claim)">Remove</button>
+					<p></p>
+				  </td>
+				</tr>
+			  </tbody>
+			</table>
+			<button ng-click="addClaim()">Add</button>
+			<button ng-click="clearClaims()">Clear</button>
+		  </div>
+		  <div class="col-xs-12">
+			<table class="table table-striped table-hover table-condensed">
+			  <thead>
+				<tr>
+				  <th>Claim #</th>
+				  <th>Drug(s)</th>
+				  <th>Date of Fill</th>
+				  <th>Quantity</th>
+				  <th>Days Supply</th>
+				  <th>Date of Last Dose</th>
+				  <th>Ingredient</th>
+				  <th>Strength</th>
+				  <th>Quantity/Day</th>
+				  <th>Conversion Factor</th>
+				  <th>Morphine Equivalent Dose</th>
+				</tr>
+			  </thead>
+			  <tbody>
+				<tr ng-repeat="claim in opioids.claims">
+				  <td>{{claim.number}}</td>
+				  <td>{{claim.drug.fullName}}</td>
+				  <td>{{claim.dateOfFill | date: 'MMM d, y'}}</td>
+				  <td>{{claim.qty}}</td>
+				  <td>{{claim.daysSupply}}</td>
+				  <td>{{claim.dateOfLastDose | date: 'MMM d, y'}}</td>
+				  <td ng-repeat="component in claim.drug.components | firstOpioidComponent">{{component.ingredient}}</td>
+				  <td ng-repeat="component in claim.drug.components | firstOpioidComponent">{{component.strength + ' ' + component.uom}}/UNIT</td>
+				  <td ng-repeat="component in claim.drug.components | firstOpioidComponent">{{claim.qty/claim.daysSupply | number: 2}} {{claim.qty/claim.daysSupply == 1 ? 'UNIT' : 'UNITS'}}/DAY</td>
+				  <td ng-repeat="component in claim.drug.components | firstOpioidComponent">{{component.conversionFactor + ' MG/' + component.uom}}</td>
+				  <td ng-repeat="component in claim.drug.components | firstOpioidComponent">{{component.med | number: 2}} MG/DAY</td>
+				</tr>
+			  </tbody>
+			</table>
+			<div>Total Days: {{opioids.total}}</div>
+			<div>Consecutive Days: {{opioids.consecutive}}</div>
+			<div>Prescribers: {{opioids.prescribers}}</div>
+			<div>Pharmacies: {{opioids.pharmacies}}</div>
+		  </div>
+		</div>
+	  </div>
+	</div>
+	<div ng-if="opioids.opioidsRouteNotFound" class="panel panel-warning">
+	  <div class="panel-heading" role="tab" id="headingFive">
+		<h3 class="panel-title">
+		  <div data-toggle="collapse" data-target="#collapseFive" data-parent="#accordion" href="#collapseFive" aria-expanded="true" aria-controls="collapseFive">Conversion factor not available for: <span ng-repeat="claim in opioids.opioidsRouteNotFound"><span ng-if="$first">{{claim.drug.fullName}}</span><span ng-if="!$first">, {{claim.drug.fullName}}</span></span></div>
+		</h3>
+	  </div>
+	</div>
+	<div ng-if="cancer" class="panel panel-danger">
+	  <div class="panel-heading" role="tab" id="headingSix">
+		<h3 class="panel-title">
+		  <div data-toggle="collapse" data-target="#collapseSix" data-parent="#accordion" href="#collapseSix" aria-expanded="true" aria-controls="collapseSix">Patients with cancer are excluded.</div>
+		</h3>
+	  </div>
+	</div>
+	<div ng-if="hospice" class="panel panel-danger">
+	  <div class="panel-heading" role="tab" id="headingSeven">
+		<h3 class="panel-title">
+		  <div data-toggle="collapse" data-target="#collapseSeven" data-parent="#accordion" href="#collapseSeven" aria-expanded="true" aria-controls="collapseSeven">Patients in hospice are excluded.</div>
+		</h3>
+	  </div>
+	</div></br>
+	<div ng-show="opioids.claims">
+	  <div class="row">
+		<div class="btn-group">
+		  <label class="btn btn-primary" ng-model="display" btn-radio="1">Morphine Equivalent Dose</label>
+		  <label class="btn btn-primary" ng-model="display" btn-radio="0">Threshold Exceeded</label>
+		</div>
+	  </div>
+	  <div class="row>">
+		<div ng-show="display == 1" id="chart" style="height: 320px"></div>
+		<div ng-show="display == 0" class="col-md-4 col-xs-6" style="max-height: 320px; overflow: auto;">
+		  <table class="table table-condensed">
+			<thead>
+			  <tr>
+				<th>Date</th>
+				<th>Threshold Exceeded</th>
+			  </tr>
+			</thead>
+			<tbody>
+			  <tr ng-repeat="(key, val) in opioids.withinThreshold track by $index">
+				<td>{{toDate(key) | date: 'shortDate'}}</td>
+				<td class="text-center">
+				  <span my-exclamation-mark="val"></span>
+				</td>
+			  </tr>
+			</tbody>
+		  </table>
+		</div>
+	  </div>
+	</div>

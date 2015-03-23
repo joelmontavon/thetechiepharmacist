@@ -1,0 +1,92 @@
+<div class="container-fluid">
+	<div class="sidebar">
+	  <div class="col-md-2 input-group">
+		  <span class="input-group-addon glyphicon glyphicon-search"></span>
+		  <input type="text" class="form-control" placeholder="Search" ng-model="search">
+	  </div>
+	</div>
+	<div class="col-md-10 col-md-offset-2 main">
+		<div ng-repeat="domain in data | filter: search">
+			<h3>{{domain.domain}}</h3>
+			<div ng-repeat="measure in domain.measures | filter: search">
+				<h4>{{measure.Measure}}</h5>
+				<table class="table table-bordered table-striped table-hover table-condensed">
+					<tbody>
+						<tr>
+							<td>Label for Stars</td>
+							<td>{{measure["Label for Stars"]}}</td>
+						</tr>
+						<tr>
+							<td>Label for Data</td>
+							<td>{{measure["Label for Data"]}}</td>
+						</tr>
+						<tr>
+							<td>Description</td>
+							<td>{{measure["Description"]}}</td>
+						</tr>
+						<tr>
+							<td>Metric</td>
+							<td>{{measure["Metric"]}}</td>
+						</tr>
+						<tr ng-if="measure['Exclusions']">
+							<td>Exclusions</td>
+							<td>{{measure["Exclusions"]}}</td>
+						</tr>
+						<tr ng-if="measure['General Notes']">
+							<td>General Notes</td>
+							<td>{{measure["General Notes"]}}</td>
+						</tr>
+						<tr>
+							<td>Data Source</td>
+							<td>{{measure["Data Source"]}}</td>
+						</tr>
+						<tr ng-if="measure['Data Source Description']">
+							<td>Data Source Description</td>
+							<td>{{measure["Data Source Description"]}}</td>
+						</tr>
+						<tr>
+							<td>CMS Framework Area</td>
+							<td>{{measure["CMS Framework Area"]}}</td>
+						</tr>
+						<tr>
+							<td>NQF #</td>
+							<td>{{measure["NQF #"]}}</td>
+						</tr>
+						<tr>
+							<td>Data Time Frame</td>
+							<td>{{measure["Data Time Frame"]}}</td>
+						</tr>
+						<tr>
+							<td>General Trend</td>
+							<td>{{measure["General Trend"]}}</td>
+						</tr>
+						<tr>
+							<td>Statistical Method</td>
+							<td>{{measure["Statistical Method"]}}</td>
+						</tr>
+						<tr>
+							<td>Improvement Measure</td>
+							<td>{{measure["Improvement Measure"]}}</td>
+						</tr>
+						<tr>
+							<td>Weighting Category</td>
+							<td>{{measure["Weighting Category"]}}</td>
+						</tr>
+						<tr>
+							<td>Weighting Value</td>
+							<td>{{measure["Weighting Value"]}}</td>
+						</tr>
+						<tr>
+							<td>Data Display</td>
+							<td>{{measure["Data Display"]}}</td>
+						</tr>
+						<tr>
+							<td>4-Star Threshold</td>
+							<td>{{measure["4-Star Threshold"]}}</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+</div>

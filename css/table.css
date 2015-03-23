@@ -1,0 +1,13 @@
+table {
+	border-color:white !important;
+}
+table thead:first-child tr:first-child th {
+	border-top: none;
+	border-right: none;
+	border-left: none;
+}
+table tfoot tr th, table tfoot tr td{
+	border-bottom: none !important;
+	border-right: none !important;
+	border-left: none !important;
+}

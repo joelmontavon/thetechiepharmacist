@@ -1,0 +1,131 @@
+[{
+  "id": "Description",
+	"value": "Description",
+	"type": "text",
+	"children": [{
+		"value": "PDC",
+		"type": "text",
+		"children": [{
+			"value": "The percentage of patients 18 years and older who met the Proportion of Days Covered (PDC) threshold of 80 percent during the measurement period.",
+			"type": "text"
+		}]
+	}]
+}, {
+  "id": "Definitions",
+	"value": "Definitions",
+	"type": "text",
+	"children": [{
+		"value": "PDC",
+		"type": "text",
+		"children": [{
+			"value": "The proportion of days in the measurement period 'covered' by prescription claims for the same medication or another in its therapeutic category.",
+			"type": "text"
+		}]
+	}, {
+		"value": "PDC threshold",
+		"type": "text",
+		"children": [{
+			"value": "The level of PDC above which the medication has a reasonable likelihood of achieving most of the potential clinical benefit (80% for diabetes and cardiovascular drugs; 90% for antiretrovirals)",
+			"type": "text"
+		}]
+	}]
+}, {
+  "id": "Eligible Population",
+	"value": "Eligible Population",
+	"type": "text",
+	"children": [{
+		"value": "Ages",
+		"type": "text",
+		"children": [{
+			"value": "18 years and older as of the last day of the measurement period.",
+			"type": "text"
+		}]
+	}, {
+		"value": "Continuous enrollment",
+		"type": "text",
+		"children": [{
+			"value": "…using enrollment data",
+			"type": "text",
+			"children": [{
+				"value": "Subjects should be continuously enrolled during the measurement period. To determine continuous enrollment for a Medicaid beneficiary for whom enrollment is verified monthly, the member may not have more than a 1-month gap in coverage (i.e., a member whose coverage lapses for 2 months [60 consecutive days] is not considered continuously enrolled).",
+				"type": "text"
+			}]
+		}, {
+			"value": "Proxy for enrollment when using pharmacy-only data",
+			"type": "text",
+			"children": [{
+				"value": "Two or more prescriptions for any medication, with 150 days between the first fill and the last fill, over a 12 month period.",
+				"type": "text"
+			}]
+		}]
+	}, {
+		"value": "Measurement Period",
+		"type": "text",
+		"children": [{
+			"value": "The patient's measurement period begins on the date of the first fill of the target medication (i.e., index date) and extends through the last day of the enrollment period or until death or disenrollment. The index date should occur at least 91 days before the end of the enrollment period.",
+			"type": "text"
+		}]
+	}, {
+		"value": "Additional eligible population criteria",
+		"type": "text",
+		"children": [{
+			"value": "Patients who filled at least two prescriptions in the therapeutic category on two unique dates of service during the measurement period.",
+			"type": "text"
+		}]
+	}]
+}, {   
+  "id": "Rate",
+  "value": "Rate",
+	"type": "text",
+  "children": [{
+	"value": "Additional eligible population criteria",
+		"type": "text",
+		"children": [{
+			"value": "Patients who filled at least two prescriptions in the therapeutic category on two unique dates of service during the measurement period.",
+			"type": "text"
+		}]
+  }, {
+	"value": "Denominator exclusion",
+		"type": "text",
+		"children": [{
+			"value": "Patients with ESRD for Renin Angiotensin System (RAS) Antagonists; Patients with ESRD can be identified using the ICD-9 code 585.6 and/or by the RxHCC 121 - Dialysis Status",
+			"type": "text"
+		}]
+  },{
+	"value": "Numerator",
+	"type": "text",
+	"children": [{
+		"value": "The number of patients who met the PDC threshold during the measurement year. Follow the steps below for each patient to determine whether the patient meets the PDC threshold.",
+			"type": "text",
+			"children": [{
+				"value": "Step 1",
+				"type": "text",
+				"children": [{
+					"value": "Determine the patient’s measurement period, defined as the index prescription date to the end of the enrollment year, disenrollment, or death.",
+					"type": "text"
+				}]
+			}, {
+				"value": "Step 2",
+				"type": "text",
+				"children": [{
+					"value": "Within the measurement period, count the days the patient was covered by at least one drug in the class based on the prescription fill date and days of supply. If prescriptions for the same drug (generic ingredient) overlap, then adjust the prescription start date to be the day after the previous fill has ended. Adjustment of overlap should also occur when there is overlap of a single drug product to a combination product containing the single drug or when there is an overlap of a combination product to another combination product where at least one of the drugs is common.",
+					"type": "text"
+				}]
+			}, {
+				"value": "Step 3",
+				"type": "text",
+				"children": [{
+					"value": "Divide the number of covered days found in Step 2 by the number of days found in Step 1. Multiply this number by 100 to obtain the PDC (as a percentage) for each patient.",
+					"type": "text"
+				}]
+			}, {
+				"value": "Step 4",
+				"type": "text",
+				"children": [{
+					"value": "Count the number of patients who had a PDC of 80% or greater and then divide by the total number of eligible patients.",
+					"type": "text"
+				}]
+			}]
+		}]
+	}]
+}]
