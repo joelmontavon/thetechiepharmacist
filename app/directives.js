@@ -167,4 +167,23 @@ directives.directive('myStars', function() {
             '<div ng-switch-default>N/A</div>' +
             '</td>'
     };
-});
+});directives.directive('myChart', ['$timeout', function($timeout) {
+    return {
+        restrict: 'A',
+        //replace: true,
+        scope: {
+			myChart: '='
+        },
+        link: function postLink(scope, elem) {
+			scope.$watch('myChart', function () {
+				$timeout( function () {
+					if (scope.myChart) {
+						scope.myChart.bindto = elem[0];
+						c3.generate(scope.myChart);
+					}
+				});
+			});
+        },
+        template: '<div></div>'
+    };
+}]);

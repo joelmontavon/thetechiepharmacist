@@ -163,6 +163,7 @@ services.factory("graphService", ["$filter", "_",
             };
           break;
       }
+	  console.log('pdcGraph');
       if (Object.keys(options).length) return c3.generate(options);
     };
 	
@@ -222,6 +223,7 @@ services.factory("graphService", ["$filter", "_",
             };
           break;
       }
+	  console.log('opioidGraph');
       if (Object.keys(options).length) return c3.generate(options);
     };
 	
@@ -835,7 +837,7 @@ services.factory("pivot", ["_",
                 var sum = _.reduce(grid.grid, function(memo, obj) {
                     //var num = obj[value.name] != "" ? Number(obj[value.name]) : obj[value.name];
 					var num = obj[value.name];
-                    if (_.isNumber(num)) {
+                    if (_.isFinite(num)) {
                         ctr += 1;
                         return memo + num;
                     } else {
@@ -847,13 +849,13 @@ services.factory("pivot", ["_",
             var max = function(grid, value) {
                 grid['values'][value.label] = _.reduce(grid.grid, function(memo, obj) {
                     var num = Number(obj[value.name]);
-                    if (_.isNumber(num)) return num > memo ? num : memo;
+                    if (_.isFinite(num)) return num > memo ? num : memo;
                 }, -Infinity);
             };
             var min = function(grid, value) {
                 grid['values'][value.label] = _.reduce(grid.grid, function(memo, obj) {
                     var num = Number(obj[value.name]);
-                    if (_.isNumber(num)) return num < memo ? num : memo;
+                    if (_.isFinite(num)) return num < memo ? num : memo;
                 }, Infinity);
             };
             var first = function(grid, value) {
@@ -865,7 +867,7 @@ services.factory("pivot", ["_",
             var sum = function(grid, value) {
                 grid['values'][value.label] = _.reduce(grid.grid, function(memo, obj) {
                     var num = Number(obj[value.name]);
-                    if (_.isNumber(num)) return memo + num;
+                    if (_.isFinite(num)) return memo + num;
                 }, 0);
             };
             var calculation = function(grid, value) {
@@ -1026,6 +1028,27 @@ services.factory("stars", ["$filter", "pivot", "_",
 		}
     };
 	
+	var thresholdsArray = function (measure, contractType, year, thresholds) {
+		if (measure && contractType && year) {
+			var arr = [];
+			var meas = thresholds[year][contractType][measure];
+			if (meas.higherIsBetter) {
+				arr.push('<' + format(meas[2], meas.format));
+				arr.push('≥' + format(meas[2], meas.format) + ' to ' + '<' + format(meas[3], meas.format));
+				arr.push('≥' + format(meas[3], meas.format) + ' to ' + '<' + format(meas[4], meas.format));
+				arr.push('≥' + format(meas[4], meas.format) + ' to ' + '<' + format(meas[5], meas.format));
+				arr.push('≥' + format(meas[5], meas.format));
+			} else {
+				arr.push('>' + format(meas[2], meas.format));
+				arr.push('>' + format(meas[3], meas.format) + ' to ' + '≤' + format(meas[2], meas.format));
+				arr.push('>' + format(meas[4], meas.format) + ' to ' + '≤' + format(meas[3], meas.format));
+				arr.push('>' + format(meas[5], meas.format) + ' to ' + '≤' + format(meas[4], meas.format));
+				arr.push('≤' + format(meas[5], meas.format)); 
+			}
+			return arr;
+		}
+    };
+	
 	var measureStars = function (score, stars, measure, contractType, year, thresholds) {
 		if (measure == 'Call Center – Pharmacy Hold Time' || measure == 'Drug Plan Quality Improvement') {
 			return stars;
@@ -1104,6 +1127,7 @@ services.factory("stars", ["$filter", "pivot", "_",
 	
     var self = {
       displayThresholds: displayThresholds,
+	  thresholdsArray: thresholdsArray,
       measureStars: measureStars,
       summaryStars: summaryStars,
 	  iFactor: iFactor
@@ -1130,15 +1154,19 @@ services.factory("stars", ["$filter", "pivot", "_",
    }
  }]);
   services.factory('statsService', function () {
-	var distro = function (arr, key, measure) {
+	var distro = function (arr, key, higherIsBetter) {
 		//http://education-portal.com/academy/lesson/finding-percentiles-in-a-data-set-formula-examples-quiz.html
 		//(k + .5r) / n = p
 		var result = {};
 		var sortedArr = [];
-		if (!measure || measure.higherIsBetter) {
-			sortedArr = _.sortBy(_.filter(arr, function (val) {return _.isNumber(val[key]);}), key);
+		if (higherIsBetter) {
+			//sortedArr = _.sortBy(_.filter(arr, function (val) {return _.isNumber(val[key]);}), key);
+			sortedArr = _.filter(arr, function (val) {return _.isFinite(val[key]);});
+			sortedArr.sort(function (a, b) {return a[key] - b[key];});
 		} else {
-			sortedArr = _.sortBy(_.filter(arr, function (val) {return _.isNumber(val[key]);}), function (item) {return -item[key];});
+			//sortedArr = _.sortBy(_.filter(arr, function (val) {return _.isNumber(val[key]);}), function (item) {return -item[key];});
+			sortedArr = _.filter(arr, function (val) {return _.isFinite(val[key]);});
+			sortedArr.sort(function (a, b) {return b[key] - a[key];});
 		}
 		var len = sortedArr.length;
 		for (var i = 0; i < len; i++) {
@@ -1159,23 +1187,25 @@ services.factory("stars", ["$filter", "pivot", "_",
 		}
 		return result;
 	};
-	var histogram = function (label, data, measure) {
-		var meas = measure ? measure.Measure : 'Summary Score';
-		var _distro = distro(data, meas, measure);
-		var x = ['x'];
+	var histogram = function (label, data, measure, higherIsBetter) {
+		var _distro = distro(data, measure, higherIsBetter);
+		var x = [];
 		var y = [label];
 		for (var prop in _distro) {
-			x.push(prop);
-			y.push(_distro[prop]['frequency']);
+			x.push(Number(prop));
 		}
+		x.sort();
+		for (var i = 0; i < x.length; i++) {
+			y.push(_distro[x[i]]['frequency']);
+		}
+		x.unshift('x');
 		return {
 			x: x,
 			y: y
 		};
 	};
-	var percentile = function (label, data, measure) {
-		var meas = measure ? measure.Measure : 'Summary Score';
-		var _distro = distro(data, meas, measure);
+	var percentile = function (label, data, measure, higherIsBetter) {
+		var _distro = distro(data, measure, higherIsBetter);
 		var x = ['x'];
 		var y = [label];
 		for (var prop in _distro) { 

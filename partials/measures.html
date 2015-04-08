@@ -1,14 +1,30 @@
-<div class="container-fluid">
-	<div class="sidebar">
+<div>
+	<!--<div class="sidebar">
 	  <div class="col-md-2 input-group">
 		  <span class="input-group-addon glyphicon glyphicon-search"></span>
 		  <input type="text" class="form-control" placeholder="Search" ng-model="search">
 	  </div>
+	  <div class="col-md-2 input-group">
+		<ui-select ng-model="selected.measure" on-select="measureSelected()">
+		  <ui-select-match placeholder="Select a measure...">{{$select.selected.name}}</ui-select-match>
+		  <ui-select-choices repeat="measure in measurez">
+			<div ng-bind-html="measure.name | highlight: $select.search"></div>
+		  </ui-select-choices>
+		</ui-select>
+	  </div>
+	</div>-->
+	<div class="col-md-2 input-group">
+		<ui-select ng-model="selected.measure" on-select="measureSelected()">
+		  <ui-select-match placeholder="Select a measure...">{{$select.selected.name}}</ui-select-match>
+		  <ui-select-choices repeat="measure in measurez">
+			<div ng-bind-html="measure.name | highlight: $select.search"></div>
+		  </ui-select-choices>
+		</ui-select>
 	</div>
 	<div class="col-md-10 col-md-offset-2 main">
-		<div ng-repeat="domain in data | filter: search">
+		<div ng-repeat="domain in measuresData | filter: selected.measure.name | filter: search">
 			<h3>{{domain.domain}}</h3>
-			<div ng-repeat="measure in domain.measures | filter: search">
+			<div ng-repeat="measure in domain.measures | filter: selected.measure.name | filter: search">
 				<h4>{{measure.Measure}}</h5>
 				<table class="table table-bordered table-striped table-hover table-condensed">
 					<tbody>
@@ -84,8 +100,49 @@
 							<td>4-Star Threshold</td>
 							<td>{{measure["4-Star Threshold"]}}</td>
 						</tr>
+						<tr>
+							<td>Thresholds</td>
+							<td>
+								<table class="table table-bordered table-striped table-hover table-condensed">
+									<thead>
+										<tr>
+											<th>Contract Type</th>
+											<th>1 Star</th>
+											<th>2 Stars</th>
+											<th>3 Stars</th>
+											<th>4 Stars</th>
+											<th>5 Stars</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr>
+											<th>MA-PD</th>
+											<td ng-repeat="item in thresholdsArray(measure.Measure.split(' - ')[1], 'MA-PD', 2015, thresholds)">{{item}}</td>
+										</tr>
+										<tr>
+											<th>PDP</th>
+											<td ng-repeat="item in thresholdsArray(measure.Measure.split(' - ')[1], 'PDP', 2015, thresholds)">{{item}}</td>
+										</tr>
+									</tbody>
+								</table>
+							</td>
+						</tr>
+						<!--<tr>
+							<th></th>
+							<td><div my-chart="myOptions"></div></td>
+						</tr>
+						<tr>
+							<th></th>
+							<td><div my-chart="chart"></div></td>
+						</tr>-->
 					</tbody>
 				</table>
+				<div ng-if="$last">
+					<div my-chart="chart1"></div>
+					<div my-chart="chart2"></div>
+					<div my-chart="chart3"></div>
+					<div my-chart="chart4"></div>
+				</div>
 			</div>
 		</div>
 	</div>

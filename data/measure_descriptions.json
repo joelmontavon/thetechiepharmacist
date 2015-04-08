@@ -205,7 +205,7 @@
 		"Data Display": "Percentage with no decimal point",
 		"4-Star Threshold": "MA-PD: = 86%, PDP: = 83%"
 	}, {
-		"Measure": "D11 - Medication Adherence for Diabetes Medications",
+		"Measure": "D11 - Part D Medication Adherence for Diabetes Medications",
 		"Label for Stars": "Taking Diabetes Medication as Directed",
 		"Label for Data": "Taking Diabetes Medication as Directed",
 		"Description": "One of the most important ways you can manage your health is by taking your medication as directed. The plan, the doctor, and the member can work together to find ways to help the member take their medication as directed. Percent of plan members with a prescription for diabetes medication who fill their prescription often enough to cover 80% or more of the time they are supposed to be taking the medication. (“Diabetes medication” means a biguanide drug, a sulfonylurea drug, a thiazolidinedione drug, a DPP-IV inhibitor, an incretin mimetic drug, or a meglitinide drug. Plan members who take insulin are not included.)",
@@ -226,7 +226,7 @@
 		"Data Display": "Percentage with no decimal point",
 		"4-Star Threshold": "MA-PD: Not predetermined, PDP: Not predetermined"
 	}, {
-		"Measure": "D12 - Medication Adherence for Hypertension (RAS antagonists)",
+		"Measure": "D12 - Part D Medication Adherence for Hypertension (RAS antagonists)",
 		"Label for Stars": "Taking Blood Pressure Medication as Directed",
 		"Label for Data": "Taking Blood Pressure Medication as Directed",
 		"Description": "One of the most important ways you can manage your health is by taking your medication as directed. The plan, the doctor, and the member can work together to find ways to help the member take their medication as directed. Percent of plan members with a prescription for a blood pressure medication who fill their prescription often enough to cover 80% or more of the time they are supposed to be taking the medication. (“Blood pressure medication” means an ACE (angiotensin converting enzyme) inhibitor, an ARB (angiotensin receptor blocker), or a direct renin inhibitor drug.)",
@@ -246,7 +246,7 @@
 		"Data Display": "Percentage with no decimal point",
 		"4-Star Threshold": "MA-PD: Not predetermined, PDP: Not predetermined"
 	}, {
-		"Measure": "D13 - Medication Adherence for Cholesterol (Statins)",
+		"Measure": "D13 - Part D Medication Adherence for Cholesterol (Statins)",
 		"Label for Stars": "Taking Cholesterol Medication as Directed",
 		"Label for Data": "Taking Cholesterol Medication as Directed",
 		"Description": "One of the most important ways you can manage your health is by taking your medication as directed. The plan, the doctor, and the member can work together to find ways to help the member take their medication as directed. Percent of plan members with a prescription for a cholesterol medication (a statin drug) who fill their prescription often enough to cover 80% or more of the time they are supposed to be taking the medication.",
