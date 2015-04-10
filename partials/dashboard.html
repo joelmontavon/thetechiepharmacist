@@ -104,7 +104,7 @@
 					  <td ng-if="measure.Measure != 'Call Center – Pharmacy Hold Time' && measure.Measure != 'Drug Plan Quality Improvement'" class="table-col-mid-left"><input ng-model="scores2Pivot.values[measure.Measure]" class="form-control"></input></td>
 					  <td ng-if="measure.Measure == 'Call Center – Pharmacy Hold Time' || measure.Measure == 'Drug Plan Quality Improvement'" class="table-col-mid-left"><input class="form-control" disabled></input></td>
 					  <td class="table-col-mid-right"><span my-stars="measureStars(scores2Pivot.values[measure.Measure], stars2Pivot.values[measure.Measure], measure.Measure, selected2.contractType, selected2.year.yearNbr, measuresData)" toggle="tooltip" placement="right" title="{{displayThresholds(measure.Measure, selected1.contractType, selected1.year.yearNbr, measuresData)}}"></span></td>
-					  <td><span class="glyphicon glyphicon-stats" ng-click="openModal(measure)"></span><span class="glyphicon glyphicon-link"></span></td>
+					  <td><span class="glyphicon glyphicon-stats" ng-click="openModal(measure)"></span> <span class="glyphicon glyphicon-link" ng-click="openModal2(measure)"></span></td>
 					  <!--<td><span ng-repeat="item in displayThresholds(measure.Measure, selected1.contractType, selected1.year.yearNbr, measuresData)" ng-if="$index == 0">1 Star:{{item}}</span><span ng-repeat="item in displayThresholds(measure.Measure, selected1.contractType, selected1.year.yearNbr, measuresData) track by $index" ng-if="$index != 0">; {{$index + 1}} Stars:{{item}}</span></td>-->
 					</tr>
 				</tbody>

@@ -333,6 +333,22 @@ controllers.controller('dashboardController', function($scope, $http, $q, $modal
 				}
             }
         });
+	};
+		
+    $scope.openModal2 = function(measure) {
+        var modalInstance = $modal.open({
+            templateUrl: './partials/new-modal.html',
+            controller: 'newModalController',
+            size: 'lg',
+            resolve: {
+                contractType: function() {
+                    return $scope.selected1.contractType;
+                },
+				measure: function () {
+					return measure;
+				}
+            }
+        });
     };
 		
 	$scope.rowSelected = function (measure) {
@@ -378,106 +394,160 @@ controllers.controller('dashboardController', function($scope, $http, $q, $modal
 		$scope.selectionChanged();
 	});
 });
-controllers.controller('modalController', function($scope, $filter, $timeout, statsService, starsData, scoresData, selected1, selected2, measure, benchmarks) {
+controllers.controller('modalController', function($scope, $filter, $timeout, pivot, statsService, starsData, scoresData, selected1, selected2, measure, benchmarks) {
 	$scope.starsData = starsData;
 	$scope.scoresData = scoresData;
 	$scope.selected1 = selected1;
 	$scope.selected2 = selected2;
 	$scope.benchmarks = benchmarks;
 	$scope.selected1.graphType = 'Year';
+	$scope.measure = measure;
 	
-	var histo1Data = _.filter($scope.starsData, function (item) {
-		return item['Contract Type'] == $scope.selected1.contractType && item['Year'] == $scope.selected1.year.yearNbr;
-	});
-	var histo1Arr = statsService.histogram('1', histo1Data, measure.Measure, true);
-	var pcnt1Data = _.filter($scope.scoresData, function (item) {
-		return item['Contract Type'] == $scope.selected1.contractType && item['Year'] == $scope.selected1.year.yearNbr;
-	});
-	var pcnt1Arr = statsService.percentile('1', pcnt1Data, measure.Measure, measure.higherIsBetter);
+	var format = measure.format;
+	var contracts = _.pluck($scope.selected1.contracts, 'Contract Number');
+	var contractsDisplay;
+	if (contracts.length > 3) {
+		contractsDisplay = contracts[0] && ', ' && contracts[1] && ', ' && contracts[2] && '...';
+	} else {
+		contractsDisplay = contracts.toString();
+	}
 	
-	var histo2Data = _.filter($scope.starsData, function (item) {
-		return item['Contract Type'] == $scope.selected2.contractType && item['Year'] == $scope.selected2.year.yearNbr;
-	});
-	var histo2Arr = statsService.histogram('2', histo2Data, measure.Measure, true);
-	var pcnt2Data = _.filter($scope.scoresData, function (item) {
-		return item['Contract Type'] == $scope.selected2.contractType && item['Year'] == $scope.selected2.year.yearNbr;
-	});
-	var pcnt2Arr = statsService.percentile('2', pcnt2Data, measure.Measure, measure.higherIsBetter);
+	$scope.scoresPivot = pivot.create()
+	.from($scope.scoresData)
+	.where({
+		"Contract Number": _.pluck($scope.selected1.contracts, 'Contract Number')
+	})
+	.groupBy(['Year'])
+	.select([{name: measure.Measure, label: measure.Measure, oper: 'avg'}])
+	.toObject();
 	
-	var options1 = {
-	  bindto: '#chart3',
+	$scope.scoresBench = pivot.create()
+	.from($scope.scoresData)
+	.where({
+		"Contract Type": $scope.selected1.contractType
+	})
+	.groupBy(['Year'])
+	.select([{name: measure.Measure, label: measure.Measure, oper: 'avg'}])
+	.toObject();
+	
+	$scope.starsPivot = pivot.create()
+	.from($scope.starsData)
+	.where({
+		"Contract Number": _.pluck($scope.selected1.contracts, 'Contract Number')
+	})
+	.groupBy(['Year'])
+	.select([{name: measure.Measure, label: measure.Measure, oper: 'avg'}])
+	.toObject();
+	
+	$scope.starsBench = pivot.create()
+	.from($scope.starsData)
+	.where({
+		"Contract Type": $scope.selected1.contractType
+	})
+	.groupBy(['Year'])
+	.select([{name: measure.Measure, label: measure.Measure, oper: 'avg'}])
+	.toObject();
+	
+	var x = ['x'];
+	var y1 = [contractsDisplay];
+	var y2 = [contractsDisplay];
+	var bench = 'All ';
+	bench = bench.concat($scope.selected1.contractType, ' Contracts');
+	console.log($scope.selected1.contractType);
+	var y3 = [bench];
+	var y4 = [bench];
+	
+	for (var i = 2012; i <= 2015; i++) {
+		x.push(i);
+		y1.push($scope.scoresPivot[i].values[measure.Measure]);
+		y2.push($scope.starsPivot[i].values[measure.Measure]);
+		y3.push($scope.scoresBench[i].values[measure.Measure]);
+		y4.push($scope.starsBench[i].values[measure.Measure]);
+	}
+	
+	console.log(x, y1, y2, y3, y4);
+	
+	$scope.chart1 = {
 	  data: {
 		x: 'x',
 		columns: [
-		  ['x',1,2,3,4,5],
-		  histo1Arr.y,
-		  histo2Arr.y
+		  x,
+		  y1,
+		  y3
 		],
-		type: 'bar',
+		type: 'line',
 		colors: {
             '1': '#286090',
             '2': '#337ab7'
         }
 	  },
-		axis: {
-		  x: {
-			type: 'categorized'
-		  }
-		}
+			axis: {
+			  x: {
+				label: 'Year',
+				type: 'categorized'
+			  },
+			  y: {
+				  label: 'Score',
+				  tick: {
+					format: function (d) {
+					  if (format == 'percent') {
+						return $filter('percentage')(d, 0);
+					  } else {
+						return $filter('number')(d, 3);
+					  }
+					}
+				  }
+			  }
+			}
 	};
 	
-	var options2 = {
-	  bindto: '#chart4',
+	$scope.chart2 = {
 	  data: {
 		x: 'x',
 		columns: [
-		  pcnt1Arr.x,
-		  pcnt1Arr.y
+		  x,
+		  y2,
+		  y4
 		],
 		type: 'line'
 	  },
-	  axis: {
-		x: {
-		  tick: {
-			format: function (d) { 
-			  return $filter('percentage')(d, 0);
-			}
-		  }
-		},
-		y: {
-		  tick: {
-			format: function (d) {
-			  if (measure.format == 'percent') {
-				return $filter('percentage')(d, 0);
-			  } else {
-				return $filter('number')(d, 3);
+			axis: {
+			  x: {
+				label: 'Year',
+				type: 'categorized'
+			  },
+			  y: {
+				  label: 'Stars',
+				  min: 1,
+				  max: 5,
+				  tick: {
+					count: 5,
+					format: function (d) {
+						return $filter('number')(d, 0);
+					}
+				  }
 			  }
 			}
-		  }
-		}
-	  }
 	};
 	
-	$timeout( function () {
-		c3.generate(options1);
-		c3.generate(options2);
-	});
 
 });
 controllers.controller('measuresController', function($scope, $http, $q, $timeout, $filter, pivot, stars, statsService) {
 	$scope.thresholdsArray = stars.thresholdsArray;
 	$scope.search = "";
+	$scope.contractTypes = [{'name':'MA-PD'},{'name':'PDP'}];
 
 	$scope.selected = {
-		measure: null
+		measure: null,
+		contractType: $scope.contractTypes[0]
 	};
 	
 	$scope.measureSelected = function () {
-		var format = $scope.thresholds[2015]['MA-PD'][$scope.selected.measure.name]['format'];
+		var format = $scope.thresholds[2015][$scope.selected.contractType.name][$scope.selected.measure.name]['format'];
 		var filtered1Data = _.filter($scope.scoresData, function (item) {
-			return item['Contract Type'] == 'MA-PD' && item['Year'] == 2015;
+			return item['Contract Type'] == $scope.selected.contractType.name && item['Year'] == 2015;
 		});
-		var ranked1Data = statsService.distro(filtered1Data, $scope.selected.measure.name, $scope.thresholds['2015']['MA-PD'][$scope.selected.measure.name].higherIsBetter);
+		var ranked1Data = statsService.distro(filtered1Data, $scope.selected.measure.name, $scope.thresholds['2015'][$scope.selected.contractType.name][$scope.selected.measure.name].higherIsBetter);
 		var ranked1Arr = {'x':['x'], 'y':[]};
 		for (var prop in ranked1Data) { 
 			ranked1Arr.y.push(Number(prop));
@@ -490,9 +560,9 @@ controllers.controller('measuresController', function($scope, $http, $q, $timeou
 		ranked1Arr.y.unshift('score');
 			
 		var filtered2Data = _.filter($scope.starsData, function (item) {
-			return item['Contract Type'] == 'MA-PD' && item['Year'] == 2015;
+			return item['Contract Type'] == $scope.selected.contractType.name && item['Year'] == 2015;
 		});
-		var ranked2Data = statsService.distro(filtered2Data, $scope.selected.measure.name, $scope.thresholds['2015']['MA-PD'][$scope.selected.measure.name].higherIsBetter);
+		var ranked2Data = statsService.distro(filtered2Data, $scope.selected.measure.name, $scope.thresholds['2015'][$scope.selected.contractType.name][$scope.selected.measure.name].higherIsBetter);
 		var ranked2Arr = {'x':['x'], 'y':['stars']};
 		for (var i = 1; i <= 5; i++) {
 			ranked2Arr.x.push(i);
@@ -513,6 +583,7 @@ controllers.controller('measuresController', function($scope, $http, $q, $timeou
 		  },
 		  axis: {
 			x: {
+			  label: 'Percentile',
 			  //type: 'categorized',
 			  tick: {
 				count: 20,
@@ -522,6 +593,7 @@ controllers.controller('measuresController', function($scope, $http, $q, $timeou
 			  }
 			},
 			y: {
+			  label: 'Score',
 			  tick: {
 				format: function (d) {
 				  if (format == 'percent') {
@@ -532,9 +604,12 @@ controllers.controller('measuresController', function($scope, $http, $q, $timeou
 				}
 			  }
 			}
+		  },
+		  legend: {
+			  hide: true
 		  }
 		};
-		console.log($scope.chart1);
+
 		$scope.chart2 = {
 		  data: {
 			x: 'x',
@@ -545,19 +620,26 @@ controllers.controller('measuresController', function($scope, $http, $q, $timeou
 			type: 'bar'
 		  },
 		  axis: {
+			x: {
+				label: 'Stars'
+			},
 			y: {
+			  label: 'Frequency',
 			  tick: {
 				format: function (d) {
 					return $filter('number')(d, 0);
 				}
 			  }
 			}
+		  },
+		  legend: {
+			  hide: true
 		  }
 		};
 
 		$scope.thresholdz = {'2': ['2'], '3':['3'], '4': ['4'], '5': ['5']};
 		for (var i = 2012; i <= 2015; i++) {
-			var meas = $scope.thresholds[i]['MA-PD'][$scope.selected.measure.name];
+			var meas = $scope.thresholds[i][$scope.selected.contractType.name][$scope.selected.measure.name];
 			$scope.thresholdz['2'].push(meas[2]);
 			$scope.thresholdz['3'].push(meas[3]);
 			$scope.thresholdz['4'].push(meas[4]);
@@ -577,9 +659,11 @@ controllers.controller('measuresController', function($scope, $http, $q, $timeou
 		  },
 			axis: {
 			  x: {
+				label: 'Year',
 				type: 'categorized'
 			  },
 			  y: {
+				  label: 'Score',
 				  tick: {
 					format: function (d) {
 					  if (format == 'percent') {
@@ -595,13 +679,13 @@ controllers.controller('measuresController', function($scope, $http, $q, $timeou
 			
 		var fourStarPivot = pivot.create()
 			.from($scope.starsData)
-			.where({'Contract Type':'MA-PD'})
+			.where({'Contract Type':$scope.selected.contractType.name})
 			.groupBy(['Year'])
 			.select([{label: 'CountContracts', oper: 'calc', calc: function (val) {var filteredArr = _.filter(val.grid, function (obj) {return _.isFinite(obj[$scope.selected.measure.name]);}); return filteredArr.length;}}, 
 				{label: 'CountFourStarContracts', oper: 'calc', calc: function (val) {var filteredArr = _.filter(val.grid, function (obj) {return _.isFinite(obj[$scope.selected.measure.name]) && obj[$scope.selected.measure.name] >= 4;}); return filteredArr.length;}}, 
 				{label: 'PercentFourStarContracts', oper: 'calc', calc: function(val) {return val.values.CountFourStarContracts / val.values.CountContracts;}}])
 			.toObject();
-		var fourStarContracts = {x: ['x'], y: ['Contracts at or Above the Four Star Threshold']};
+		var fourStarContracts = {x: ['x'], y: ['Contracts At or Above 4-Stars']};
 		for (var prop in fourStarPivot) {
 			fourStarContracts.x.push(prop);
 			fourStarContracts.y.push(fourStarPivot[prop]['values']['PercentFourStarContracts']);
@@ -618,9 +702,11 @@ controllers.controller('measuresController', function($scope, $http, $q, $timeou
 		  },
 			axis: {
 			  x: {
+				label: 'Year',
 				type: 'categorized'
 			  },
 			  y: {
+				label: 'Score',
 				max: .9,
 				min: .1,
 				tick: {
@@ -629,6 +715,223 @@ controllers.controller('measuresController', function($scope, $http, $q, $timeou
 					}
 				}
 			  }
+			},
+			legend: {
+				hide: true
+			}
+		};
+	};
+	
+	$q.all([
+        $http.get('data/measures.json'),
+		$http.get('data/measure_descriptions.json'),
+        $http.get('data/scores.json'),
+		$http.get('data/stars.json')])
+	.then(function(results) {
+		$scope.thresholds = results[0].data;
+		$scope.measuresData = results[1].data;
+		$scope.scoresData = results[2].data;
+		$scope.starsData = results[3].data;
+		$scope.measurez = [];
+		results[1].data.forEach(function (domain) {
+			domain.measures.forEach(function (measure) {
+				$scope.measurez.push({name: measure.Measure.split(' - ')[1]});
+			});
+		});
+		$scope.selected.measure = $scope.measurez[0];
+		$scope.measureSelected();
+	});
+});
+controllers.controller('newModalController', function($scope, $modalInstance, $http, $q, $timeout, $filter, pivot, stars, statsService, contractType, measure) {
+	$scope.thresholdsArray = stars.thresholdsArray;
+	$scope.search = "";
+	$scope.contractTypes = [{'name':'MA-PD'},{'name':'PDP'}];
+
+	$scope.selected = {
+		measure: {
+			name: measure
+		},
+		contractType: {
+			name: contractType
+		}
+	};
+	
+	$scope.measureSelected = function () {
+		var format = $scope.thresholds[2015][$scope.selected.contractType.name][$scope.selected.measure.name]['format'];
+		var filtered1Data = _.filter($scope.scoresData, function (item) {
+			return item['Contract Type'] == $scope.selected.contractType.name && item['Year'] == 2015;
+		});
+		var ranked1Data = statsService.distro(filtered1Data, $scope.selected.measure.name, $scope.thresholds['2015'][$scope.selected.contractType.name][$scope.selected.measure.name].higherIsBetter);
+		var ranked1Arr = {'x':['x'], 'y':[]};
+		for (var prop in ranked1Data) { 
+			ranked1Arr.y.push(Number(prop));
+		}
+		ranked1Arr.y.sort(function (a, b) {return a - b;});
+
+		for (var i = 0; i < ranked1Arr.y.length; i++) {
+			ranked1Arr.x.push(ranked1Data[ranked1Arr.y[i]]['percentile']);
+		}
+		ranked1Arr.y.unshift('score');
+			
+		var filtered2Data = _.filter($scope.starsData, function (item) {
+			return item['Contract Type'] == $scope.selected.contractType.name && item['Year'] == 2015;
+		});
+		var ranked2Data = statsService.distro(filtered2Data, $scope.selected.measure.name, $scope.thresholds['2015'][$scope.selected.contractType.name][$scope.selected.measure.name].higherIsBetter);
+		var ranked2Arr = {'x':['x'], 'y':['stars']};
+		for (var i = 1; i <= 5; i++) {
+			ranked2Arr.x.push(i);
+			ranked2Arr.y.push(ranked2Data[i]['frequency']);
+		}
+			
+		$scope.chart1 = {
+		  data: {
+			x: 'x',
+			columns: [
+			  ranked1Arr.x,
+			  ranked1Arr.y
+			],
+			type: 'spline',
+			colors: {
+				'score': '#286090'
+			}
+		  },
+		  axis: {
+			x: {
+			  label: 'Percentile',
+			  //type: 'categorized',
+			  tick: {
+				count: 20,
+				format: function (d) { 
+				  return $filter('percentage')(d, 0);
+				}
+			  }
+			},
+			y: {
+			  label: 'Score',
+			  tick: {
+				format: function (d) {
+				  if (format == 'percent') {
+					return $filter('percentage')(d, 0);
+				  } else {
+					return $filter('number')(d, 3);
+				  }
+				}
+			  }
+			}
+		  },
+		  legend: {
+			  hide: true
+		  }
+		};
+
+		$scope.chart2 = {
+		  data: {
+			x: 'x',
+			columns: [
+			  ranked2Arr.x,
+			  ranked2Arr.y
+			],
+			type: 'bar'
+		  },
+		  axis: {
+			x: {
+				label: 'Stars'
+			},
+			y: {
+			  label: 'Frequency',
+			  tick: {
+				format: function (d) {
+					return $filter('number')(d, 0);
+				}
+			  }
+			}
+		  },
+		  legend: {
+			  hide: true
+		  }
+		};
+
+		$scope.thresholdz = {'2': ['2'], '3':['3'], '4': ['4'], '5': ['5']};
+		for (var i = 2012; i <= 2015; i++) {
+			var meas = $scope.thresholds[i][$scope.selected.contractType.name][$scope.selected.measure.name];
+			$scope.thresholdz['2'].push(meas[2]);
+			$scope.thresholdz['3'].push(meas[3]);
+			$scope.thresholdz['4'].push(meas[4]);
+			$scope.thresholdz['5'].push(meas[5]);
+		}
+		$scope.chart3 = {
+		  data: {
+			x: 'x',
+			columns: [
+			  ['x',2012,2013,2014,2015],
+			  $scope.thresholdz['2'],
+			  $scope.thresholdz['3'],
+			  $scope.thresholdz['4'],
+			  $scope.thresholdz['5'],
+			],
+			type: 'line'
+		  },
+			axis: {
+			  x: {
+				label: 'Year',
+				type: 'categorized'
+			  },
+			  y: {
+				  label: 'Score',
+				  tick: {
+					format: function (d) {
+					  if (format == 'percent') {
+						return $filter('percentage')(d, 0);
+					  } else {
+						return $filter('number')(d, 3);
+					  }
+					}
+				  }
+			  }
+			}
+		};
+			
+		var fourStarPivot = pivot.create()
+			.from($scope.starsData)
+			.where({'Contract Type':$scope.selected.contractType.name})
+			.groupBy(['Year'])
+			.select([{label: 'CountContracts', oper: 'calc', calc: function (val) {var filteredArr = _.filter(val.grid, function (obj) {return _.isFinite(obj[$scope.selected.measure.name]);}); return filteredArr.length;}}, 
+				{label: 'CountFourStarContracts', oper: 'calc', calc: function (val) {var filteredArr = _.filter(val.grid, function (obj) {return _.isFinite(obj[$scope.selected.measure.name]) && obj[$scope.selected.measure.name] >= 4;}); return filteredArr.length;}}, 
+				{label: 'PercentFourStarContracts', oper: 'calc', calc: function(val) {return val.values.CountFourStarContracts / val.values.CountContracts;}}])
+			.toObject();
+		var fourStarContracts = {x: ['x'], y: ['Contracts At or Above 4-Stars']};
+		for (var prop in fourStarPivot) {
+			fourStarContracts.x.push(prop);
+			fourStarContracts.y.push(fourStarPivot[prop]['values']['PercentFourStarContracts']);
+		}
+			
+		$scope.chart4 = {
+		  data: {
+			x: 'x',
+			columns: [
+			  fourStarContracts.x,
+			  fourStarContracts.y
+			],
+			type: 'line'
+		  },
+			axis: {
+			  x: {
+				label: 'Year',
+				type: 'categorized'
+			  },
+			  y: {
+				label: 'Score',
+				max: .9,
+				min: .1,
+				tick: {
+					format: function (d) {
+						return $filter('percentage')(d, 0);
+					}
+				}
+			  }
+			},
+			legend: {
+				hide: true
 			}
 		};
 	};
@@ -654,16 +957,19 @@ controllers.controller('measuresController', function($scope, $http, $q, $timeou
 	});
 });
 controllers.controller('trendsController', function($scope, $filter, $timeout, $location, _, pivot, statsService, summaryData) {
-	summaryData.getSummaryScores().then ( function (data) {
-		var histoData = _.filter(data, function (item) {
-			return item['Contract Type'] == 'MA-PD' && item['Year'] == 2015;
+	$scope.search = "";
+	$scope.contractTypes = [{'name':'MA-PD'},{'name':'PDP'}];
+
+	$scope.selected = {
+		contractType: $scope.contractTypes[0]
+	};
+	
+	$scope.contractTypeChanged = function () {
+		var histoData = _.filter($scope.starsData, function (item) {
+			return item['Contract Type'] == $scope.selected.contractType.name && item['Year'] == 2015;
 		});
-		/*histoData.forEach (function (contract) {
-			contract['Summary Score'] = Number(contract['Summary Score']);
-		});*/
 		$scope.histoArr = statsService.histogram('Summary Score', histoData, 'Summary Score', true);
-		var options = {
-		  bindto: '#chart',
+		$scope.chart1 = {
 		  data: {
 			x: 'x',
 			columns: [
@@ -678,29 +984,33 @@ controllers.controller('trendsController', function($scope, $filter, $timeout, $
 		  },
 			axis: {
 			  x: {
+				label: 'Stars',
 				type: 'categorized'
+			  },
+			  y: {
+				label: 'Frequency'
 			  }
+			},
+			legend: {
+				hide: true
 			}
 		};
-		$timeout( function () {
-			c3.generate(options);
-		});
+		
 		var fourStarPivot = pivot.create()
-			.from(data)
-			.where({'Contract Type':'MA-PD'})
+			.from($scope.starsData)
+			.where({'Contract Type':$scope.selected.contractType.name})
 			.groupBy(['Year'])
 			.select([{label: 'CountContracts', oper: 'calc', calc: function (val) {var filteredArr = _.filter(val.grid, function (obj) {return _.isFinite(obj['Summary Score']);}); return filteredArr.length;}}, 
 				{label: 'CountFourStarContracts', oper: 'calc', calc: function (val) {var filteredArr = _.filter(val.grid, function (obj) {return _.isFinite(obj['Summary Score']) && obj['Summary Score'] >= 4;}); return filteredArr.length;}}, 
 				{label: 'PercentFourStarContracts', oper: 'calc', calc: function(val) {return val.values.CountFourStarContracts / val.values.CountContracts;}}])
 			.toObject();
-		var fourStarContracts = {x: ['x'], y: ['Contracts at or Above the Four Star Threshold']};
+		var fourStarContracts = {x: ['x'], y: ['Contracts At or Above 4-Stars']};
 		for (var prop in fourStarPivot) {
 			fourStarContracts.x.push(prop);
 			fourStarContracts.y.push(fourStarPivot[prop]['values']['PercentFourStarContracts']);
 		}
-		console.log(fourStarContracts);
-		var options1 = {
-		  bindto: '#chart2',
+		
+		$scope.chart2 = {
 		  data: {
 			x: 'x',
 			columns: [
@@ -711,17 +1021,28 @@ controllers.controller('trendsController', function($scope, $filter, $timeout, $
 		  },
 			axis: {
 			  x: {
+				label: 'Year',
 				type: 'categorized'
 			  },
 			  y: {
+				label: 'Score',
 				max: .9,
-				min: .1
+				min: .1,
+				tick: {
+					format: function (d) {
+						return $filter('percentage')(d, 0);
+					}
+				}
 			  }
+			},
+			legend: {
+				hide: true
 			}
 		};
-		$timeout( function () {
-			c3.generate(options1);
-		});
-		
+	};
+	
+	summaryData.getSummaryScores().then ( function (data) {
+		$scope.starsData = data;
+		$scope.contractTypeChanged();
 	});
 });	

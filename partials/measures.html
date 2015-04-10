@@ -13,19 +13,25 @@
 		</ui-select>
 	  </div>
 	</div>-->
-	<div class="col-md-2 input-group">
+	<div class="col-md-2">
 		<ui-select ng-model="selected.measure" on-select="measureSelected()">
 		  <ui-select-match placeholder="Select a measure...">{{$select.selected.name}}</ui-select-match>
 		  <ui-select-choices repeat="measure in measurez">
 			<div ng-bind-html="measure.name | highlight: $select.search"></div>
 		  </ui-select-choices>
 		</ui-select>
+		<ui-select ng-model="selected.contractType" on-select="measureSelected()">
+		  <ui-select-match placeholder="Select a contract Type...">{{$select.selected.name}}</ui-select-match>
+		  <ui-select-choices repeat="type in contractTypes">
+			<div ng-bind-html="type.name | highlight: $select.search"></div>
+		  </ui-select-choices>
+		</ui-select>
 	</div>
-	<div class="col-md-10 col-md-offset-2 main">
+	<div class="col-md-10 col-md-offset-2">
 		<div ng-repeat="domain in measuresData | filter: selected.measure.name | filter: search">
 			<h3>{{domain.domain}}</h3>
 			<div ng-repeat="measure in domain.measures | filter: selected.measure.name | filter: search">
-				<h4>{{measure.Measure}}</h5>
+				<h4>{{measure.Measure}}</h4>
 				<table class="table table-bordered table-striped table-hover table-condensed">
 					<tbody>
 						<tr>
@@ -138,9 +144,17 @@
 					</tbody>
 				</table>
 				<div ng-if="$last">
+					<h3>Scores by Percentile</h3>
+					<h5>2015 Star Ratings - {{selected.measure.name}}</h5>
 					<div my-chart="chart1"></div>
+					<h3>Distribution of Stars</h3>
+					<h5>2015 Star Ratings - {{selected.measure.name}}</h5>
 					<div my-chart="chart2"></div>
+					<h3>Thresholds by Year</h3>
+					<h5>{{selected.measure.name}}</h5>
 					<div my-chart="chart3"></div>
+					<h3>Contracts At or Above 4-Stars</h3>
+					<h5>{{selected.measure.name}}</h5>
 					<div my-chart="chart4"></div>
 				</div>
 			</div>

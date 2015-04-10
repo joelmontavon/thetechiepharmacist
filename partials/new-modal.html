@@ -1,0 +1,131 @@
+<div ng-repeat="domain in measuresData | filter: selected.measure.name | filter: search">
+	<h3>{{domain.domain}}</h3>
+	<div ng-repeat="measure in domain.measures | filter: selected.measure.name | filter: search">
+		<h4>{{measure.Measure}}</h4>
+		<table class="table table-bordered table-striped table-hover table-condensed">
+			<tbody>
+				<tr>
+					<td>Label for Stars</td>
+					<td>{{measure["Label for Stars"]}}</td>
+				</tr>
+				<tr>
+					<td>Label for Data</td>
+					<td>{{measure["Label for Data"]}}</td>
+				</tr>
+				<tr>
+					<td>Description</td>
+					<td>{{measure["Description"]}}</td>
+				</tr>
+				<tr>
+					<td>Metric</td>
+					<td>{{measure["Metric"]}}</td>
+				</tr>
+				<tr ng-if="measure['Exclusions']">
+					<td>Exclusions</td>
+					<td>{{measure["Exclusions"]}}</td>
+				</tr>
+				<tr ng-if="measure['General Notes']">
+					<td>General Notes</td>
+					<td>{{measure["General Notes"]}}</td>
+				</tr>
+				<tr>
+					<td>Data Source</td>
+					<td>{{measure["Data Source"]}}</td>
+				</tr>
+				<tr ng-if="measure['Data Source Description']">
+					<td>Data Source Description</td>
+					<td>{{measure["Data Source Description"]}}</td>
+				</tr>
+				<tr>
+					<td>CMS Framework Area</td>
+					<td>{{measure["CMS Framework Area"]}}</td>
+				</tr>
+				<tr>
+					<td>NQF #</td>
+					<td>{{measure["NQF #"]}}</td>
+				</tr>
+				<tr>
+					<td>Data Time Frame</td>
+					<td>{{measure["Data Time Frame"]}}</td>
+				</tr>
+				<tr>
+					<td>General Trend</td>
+					<td>{{measure["General Trend"]}}</td>
+				</tr>
+				<tr>
+					<td>Statistical Method</td>
+					<td>{{measure["Statistical Method"]}}</td>
+				</tr>
+				<tr>
+					<td>Improvement Measure</td>
+					<td>{{measure["Improvement Measure"]}}</td>
+				</tr>
+				<tr>
+					<td>Weighting Category</td>
+					<td>{{measure["Weighting Category"]}}</td>
+				</tr>
+				<tr>
+					<td>Weighting Value</td>
+					<td>{{measure["Weighting Value"]}}</td>
+				</tr>
+				<tr>
+					<td>Data Display</td>
+					<td>{{measure["Data Display"]}}</td>
+				</tr>
+				<tr>
+					<td>4-Star Threshold</td>
+					<td>{{measure["4-Star Threshold"]}}</td>
+				</tr>
+				<tr>
+					<td>Thresholds</td>
+					<td>
+						<table class="table table-bordered table-striped table-hover table-condensed">
+							<thead>
+								<tr>
+									<th>Contract Type</th>
+									<th>1 Star</th>
+									<th>2 Stars</th>
+									<th>3 Stars</th>
+									<th>4 Stars</th>
+									<th>5 Stars</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<th>MA-PD</th>
+									<td ng-repeat="item in thresholdsArray(measure.Measure.split(' - ')[1], 'MA-PD', 2015, thresholds)">{{item}}</td>
+								</tr>
+								<tr>
+									<th>PDP</th>
+									<td ng-repeat="item in thresholdsArray(measure.Measure.split(' - ')[1], 'PDP', 2015, thresholds)">{{item}}</td>
+								</tr>
+							</tbody>
+						</table>
+					</td>
+				</tr>
+				<!--<tr>
+					<th></th>
+					<td><div my-chart="myOptions"></div></td>
+				</tr>
+				<tr>
+					<th></th>
+					<td><div my-chart="chart"></div></td>
+				</tr>-->
+			</tbody>
+		</table>
+		<div ng-if="$last">
+			<h3>Scores by Percentile</h3>
+			<h5>2015 Star Ratings - {{selected.measure.name}}</h5>
+			<div my-chart="chart1"></div>
+			<h3>Distribution of Stars</h3>
+			<h5>2015 Star Ratings - {{selected.measure.name}}</h5>
+			<div my-chart="chart2"></div>
+			<h3>Thresholds by Year</h3>
+			<h5>{{selected.measure.name}}</h5>
+			<div my-chart="chart3"></div>
+			<h3>Contracts At or Above 4-Stars</h3>
+			<h5>{{selected.measure.name}}</h5>
+			<div my-chart="chart4"></div>
+		</div>
+	</div>
+</div>
