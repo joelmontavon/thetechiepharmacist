@@ -3,8 +3,8 @@ controllers.controller('controller', function($scope, $filter, $timeout, $locati
 	$scope.toDate = Date.getWithDaysFromEpoch;
 	$scope.drugsService = drugsService;
 
-	$scope.fromDt = Date.getWithOffsetForTimezone('2015-01-01');
-	$scope.thruDt = Date.getWithOffsetForTimezone('2015-12-31');
+	$scope.fromDt = Date.getWithOffsetForTimezone('2016-01-01');
+	$scope.thruDt = Date.getWithOffsetForTimezone('2016-12-31');
 	$scope.dob = Date.getWithOffsetForTimezone('1997-12-31');
 	$scope.elig = [];
 	$scope.claims = [];
@@ -13,7 +13,7 @@ controllers.controller('controller', function($scope, $filter, $timeout, $locati
 	drugsService.getDrugs().then(function (data) {
 		$scope.drugs = data;
 		/*$scope.elig = [
-			{seq: '001', from: Date.getWithOffsetForTimezone('2015-01-01'), thru: Date.getWithOffsetForTimezone('2015-06-30')}
+			{seq: '001', from: Date.getWithOffsetForTimezone('2016-01-01'), thru: Date.getWithOffsetForTimezone('2016-06-30')}
 		];
 		eligCtr = 1001;
 		$scope.eligChanged();
@@ -75,8 +75,8 @@ controllers.controller('controller', function($scope, $filter, $timeout, $locati
 		eligCtr += 1;
 		$scope.elig.push({
 			seq: eligCtr.toString().substr(1,3),
-			from: Date.getWithOffsetForTimezone('2015-01-01'),
-			thru: Date.getWithOffsetForTimezone('2015-12-31')
+			from: Date.getWithOffsetForTimezone('2016-01-01'),
+			thru: Date.getWithOffsetForTimezone('2016-12-31')
 		});
 		$scope.eligChanged();
 	};
