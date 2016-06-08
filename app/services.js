@@ -223,7 +223,7 @@ services.factory("graphService", ["$filter", "_",
             };
           break;
       }
-	  console.log('opioidGraph');
+	  //console.log('opioidGraph');
       if (Object.keys(options).length) return c3.generate(options);
     };
 	
@@ -644,7 +644,8 @@ services.factory("opioidsService", ["_", function(_) {
               }
             });
           }
-          claim.dateOfLastDose = Date.getWithDaysFromEpoch(i);
+          //claim.dateOfLastDose = Date.getWithDaysFromEpoch(i);
+		  claim.dateOfLastDose = Date.getWithDaysFromEpoch(dateOfFill + claim.daysSupply - 1);
         });
 		var resultArr = ['Morphine Equivalent Dose'];
 		for (var i = from; i <= thru; i++)

@@ -216,7 +216,7 @@
 			  <tbody>
 				<tr ng-repeat="claim in adherence.claims">
 				  <td>{{claim.number}}</td>
-				  <td>{{claim.drug.id}}</td>
+				  <td>{{claim.drug.fullName}}</td>
 				  <td>{{claim.dateOfFill | date: 'MMM d, y'}}</td>
 				  <td>{{claim.daysSupply}}</td>
 				  <td>{{claim.dateOfFillAdj | date: 'MMM d, y'}}</td>
