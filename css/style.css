@@ -21,6 +21,8 @@ body {
   height: 100px;
 }
 
+.ui-select-choices { width: 200 }
+
 .highlighted { background: yellow }
 
 .c3-line { stroke-width: 3px }
