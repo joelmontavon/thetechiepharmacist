@@ -21,7 +21,7 @@ body {
   height: 100px;
 }
 
-.ui-select-bootstrap>.ui-select-choices { width: 200 }
+.ui-select-bootstrap>.ui-select-choices { width: 600px }
 
 .highlighted { background: yellow }
 
