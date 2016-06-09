@@ -21,8 +21,6 @@ body {
   height: 100px;
 }
 
-.ui-select-bootstrap>.ui-select-choices { width: 600px }
-
 .highlighted { background: yellow }
 
 .c3-line { stroke-width: 3px }
