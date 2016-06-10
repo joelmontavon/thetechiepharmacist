@@ -12,7 +12,7 @@ controllers.controller('controller', function($scope, $filter, $timeout, $locati
   
 	drugsService.getDrugs().then(function (data) {
 		$scope.drugs = data;
-		/*$scope.elig = [
+		$scope.elig = [
 			{seq: '001', from: Date.getWithOffsetForTimezone('2016-01-01'), thru: Date.getWithOffsetForTimezone('2016-06-30')}
 		];
 		eligCtr = 1001;
@@ -33,7 +33,7 @@ controllers.controller('controller', function($scope, $filter, $timeout, $locati
 		claimsCtr = 1008;
 		$timeout( function () {
 		  $scope.claimChanged();
-		});*/
+		});
 		$scope.clearElig();
 		$scope.clearClaims();
 	});
