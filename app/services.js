@@ -472,7 +472,7 @@ services.factory('drugsService', ['$http', '$q', function ($http, $q) {
   var getDrugs = function () {
     //http://stackoverflow.com/questions/20252640/angular-combining-parallel-and-chained-requests-with-http-then-and-q-all
     //https://egghead.io/lessons/angularjs-q-all
-    return $http.get('http://rxnav.nlm.nih.gov/REST/RxTerms/allconcepts')
+    return $http.get('https://rxnav.nlm.nih.gov/REST/RxTerms/allconcepts')
       .then(function(data) {
         return data.data.minConceptGroup.minConcept;
       });
@@ -480,9 +480,9 @@ services.factory('drugsService', ['$http', '$q', function ($http, $q) {
   var getDrugInfo = function (rxcui) {
 	var deferred = $q.defer();
     $q.all([
-      $http.get('http://rxnav.nlm.nih.gov/REST/RxTerms/rxcui/' + rxcui + '/allinfo'),
-      $http.get('http://rxnav.nlm.nih.gov/REST/rxcui/' + rxcui + '/allProperties?prop=attributes'),
-      $http.get('http://rxnav.nlm.nih.gov/REST/rxcui/' + rxcui + '/related?tty=SCDC')
+      $http.get('https://rxnav.nlm.nih.gov/REST/RxTerms/rxcui/' + rxcui + '/allinfo'),
+      $http.get('https://rxnav.nlm.nih.gov/REST/rxcui/' + rxcui + '/allProperties?prop=attributes'),
+      $http.get('https://rxnav.nlm.nih.gov/REST/rxcui/' + rxcui + '/related?tty=SCDC')
     ])
     .then(function (responses) {
       var result = {};
@@ -504,8 +504,8 @@ services.factory('drugsService', ['$http', '$q', function ($http, $q) {
     .then(function (result) {
       result.components.forEach(function (component) {
         $q.all([
-          $http.get('http://rxnav.nlm.nih.gov/REST/rxcui/' + component.rxcui + '/allProperties?prop=attributes'),
-          $http.get('http://rxnav.nlm.nih.gov/REST/rxcui/' + component.rxcui + '/related?tty=IN')
+          $http.get('https://rxnav.nlm.nih.gov/REST/rxcui/' + component.rxcui + '/allProperties?prop=attributes'),
+          $http.get('https://rxnav.nlm.nih.gov/REST/rxcui/' + component.rxcui + '/related?tty=IN')
         ])
         .then(function (responses) {
           var strength = _.result(_.find(responses[0].data.propConceptGroup.propConcept, {propName: 'STRENGTH'}), 'propValue').split(' ');
@@ -513,7 +513,7 @@ services.factory('drugsService', ['$http', '$q', function ($http, $q) {
           component.uom = strength.length > 1 ? strength[1] : strength[0];
           var ingredient = _.find(responses[1].data.relatedGroup.conceptGroup[0].conceptProperties, {tty: 'IN'});
           component.ingredient = _.result(ingredient, 'name');
-          $http.get('http://rxnav.nlm.nih.gov/REST/rxclass/class/byRxcui?rxcui=' + ingredient.rxcui + '&relaSource=ATC')
+          $http.get('https://rxnav.nlm.nih.gov/REST/rxclass/class/byRxcui?rxcui=' + ingredient.rxcui + '&relaSource=ATC')
             .then(function (response) {
               component.classes = [];
               if (_.has(response.data, 'rxclassDrugInfoList')) {
