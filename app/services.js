@@ -467,8 +467,6 @@ services.factory("eligService", ["_", function(_) {
   };
 }]);
 services.factory('drugsService', ['$http', '$q', function ($http, $q) {
-  $http.defaults.headers.get = { 'Access-Control-Allow-Origin' : '*' };
-  $http.defaults.responseType = 'JSON';
   var getDrugs = function () {
     //http://stackoverflow.com/questions/20252640/angular-combining-parallel-and-chained-requests-with-http-then-and-q-all
     //https://egghead.io/lessons/angularjs-q-all
