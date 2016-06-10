@@ -46,8 +46,8 @@
 			((contEnroll && gap <= 31) || (!contEnroll && adherence.span >= 150)) && 
 			adherence.uniqueDatesOfFill >= 2 && 
 			adherence.daysInMeasurementPeriod[thruNbr] >= 91 && 
-			(measures.model.id == 'Statin Medications' || !esrd) && 
-			(measures.model.id != 'Diabetes Medications' || !insulin)" class="col-xs-6">
+			(measures.model.label == 'Statin Medications' || !esrd) && 
+			(measures.model.label != 'Diabetes Medications' || !insulin)" class="col-xs-6">
 			<div class="col-offset-2">
 			  <div my-gauge my-value="{{adherence.pdc[thruNbr - fromNbr + 1] * 100}}"></div>
 			</div>
@@ -76,7 +76,7 @@
 					<div my-datepicker="dob" my-event="claimChanged()"></div>
 				  </td>
 				</tr>
-				<tr ng-show="measures.model.id == 'Diabetes Medications'">
+				<tr ng-show="measures.model.label == 'Diabetes Medications'">
 				  <td>Patient on Insulin:</td>
 				  <td>
 					<div class="btn-group" ng-init="insulin = 0">
@@ -85,7 +85,7 @@
 					</div>
 				  </td>
 				</tr>
-				<tr ng-show="measures.model.id == 'Diabetes Medications' || measures.model.id == 'Renin Angiotensin System (RAS) Antagonists'">
+				<tr ng-show="measures.model.label == 'Diabetes Medications' || measures.model.label == 'Renin Angiotensin System (RAS) Antagonists'">
 				  <td>Patient with End-Stage Renal Disease (ESRD):</td>
 				  <td>
 					<div class="btn-group" ng-init="esrd = 0">
