@@ -18,14 +18,14 @@ controllers.controller('controller', function($scope, $filter, $timeout, $locati
 		eligCtr = 1001;
 		$scope.eligChanged();
 		$scope.claims = [
-		  {number: '001', drug: {"fullName":"Metformin hydrochloride 500 MG Oral Tablet","termType":"SCD","rxcui":"861007"}, dateOfFill: Date.getWithOffsetForTimezone('2015-01-06'), qty:30, daysSupply: 30, md: '1234567890', pharm: '1234567890'},
-		  {number: '002', drug: {"fullName":"Glyburide 5 MG Oral Tablet","termType":"SCD","rxcui":"310537"}, dateOfFill: Date.getWithOffsetForTimezone('2015-01-06'), qty:30, daysSupply: 30},
-		  {number: '003', drug: {"fullName":"Metformin hydrochloride 500 MG Oral Tablet","termType":"SCD","rxcui":"861007"}, dateOfFill: Date.getWithOffsetForTimezone('2015-02-15'), qty:30, daysSupply: 30},
-		  {number: '004', drug: {"fullName":"Glyburide 5 MG Oral Tablet","termType":"SCD","rxcui":"310537"}, dateOfFill: Date.getWithOffsetForTimezone('2015-02-15'), qty:30, daysSupply: 30},
-		  {number: '005', drug: {"fullName":"Glyburide 5 MG / Metformin hydrochloride 500 MG Oral Tablet","termType":"SCD","rxcui":"861753"}, dateOfFill: Date.getWithOffsetForTimezone('2015-02-28'), qty:30, daysSupply: 30},
-		  {number: '006', drug: {"fullName":"Glyburide 5 MG / Metformin hydrochloride 500 MG Oral Tablet","termType":"SCD","rxcui":"861753"}, dateOfFill: Date.getWithOffsetForTimezone('2015-03-30'), qty:30, daysSupply: 30},
-		  {number: '007', drug: {"fullName":"Glyburide 5 MG / Metformin hydrochloride 500 MG Oral Tablet","termType":"SCD","rxcui":"861753"}, dateOfFill: Date.getWithOffsetForTimezone('2015-04-28'), qty:30, daysSupply: 30},
-		  {number: '008', drug: {"fullName":"Glyburide 5 MG / Metformin hydrochloride 500 MG Oral Tablet","termType":"SCD","rxcui":"861753"}, dateOfFill: Date.getWithOffsetForTimezone('2015-05-25'), qty:30, daysSupply: 30}
+		  {number: '001', drug: {"fullName":"Metformin hydrochloride 500 MG Oral Tablet","termType":"SCD","rxcui":"861007"}, dateOfFill: Date.getWithOffsetForTimezone('2016-01-06'), qty:30, daysSupply: 30, md: '1234567890', pharm: '1234567890'},
+		  {number: '002', drug: {"fullName":"Glyburide 5 MG Oral Tablet","termType":"SCD","rxcui":"310537"}, dateOfFill: Date.getWithOffsetForTimezone('2016-01-06'), qty:30, daysSupply: 30},
+		  {number: '003', drug: {"fullName":"Metformin hydrochloride 500 MG Oral Tablet","termType":"SCD","rxcui":"861007"}, dateOfFill: Date.getWithOffsetForTimezone('2016-02-15'), qty:30, daysSupply: 30},
+		  {number: '004', drug: {"fullName":"Glyburide 5 MG Oral Tablet","termType":"SCD","rxcui":"310537"}, dateOfFill: Date.getWithOffsetForTimezone('2016-02-15'), qty:30, daysSupply: 30},
+		  {number: '005', drug: {"fullName":"Glyburide 5 MG / Metformin hydrochloride 500 MG Oral Tablet","termType":"SCD","rxcui":"861753"}, dateOfFill: Date.getWithOffsetForTimezone('2016-02-28'), qty:30, daysSupply: 30},
+		  {number: '006', drug: {"fullName":"Glyburide 5 MG / Metformin hydrochloride 500 MG Oral Tablet","termType":"SCD","rxcui":"861753"}, dateOfFill: Date.getWithOffsetForTimezone('2016-03-30'), qty:30, daysSupply: 30},
+		  {number: '007', drug: {"fullName":"Glyburide 5 MG / Metformin hydrochloride 500 MG Oral Tablet","termType":"SCD","rxcui":"861753"}, dateOfFill: Date.getWithOffsetForTimezone('2016-04-28'), qty:30, daysSupply: 30},
+		  {number: '008', drug: {"fullName":"Glyburide 5 MG / Metformin hydrochloride 500 MG Oral Tablet","termType":"SCD","rxcui":"861753"}, dateOfFill: Date.getWithOffsetForTimezone('2016-05-25'), qty:30, daysSupply: 30}
 		];
 		$scope.claims.forEach( function (claim) {
 		  $scope.drugSelected(claim);
