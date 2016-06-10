@@ -33,9 +33,9 @@ controllers.controller('controller', function($scope, $filter, $timeout, $locati
 		claimsCtr = 1008;
 		$timeout( function () {
 		  $scope.claimChanged();
-		});
+		});*/
 		$scope.clearElig();
-		$scope.clearClaims();*/
+		$scope.clearClaims();
 	});
   
 	var measures = [{id:'A10B', label:'Diabetes Medications'}, {id:'C09', label:'Renin Angiotensin System (RAS) Antagonists'}, {id:'C10AA', label:'Statin Medications'}];
