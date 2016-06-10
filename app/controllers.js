@@ -54,6 +54,7 @@ controllers.controller('controller', function($scope, $filter, $timeout, $locati
 		},
 		events: {
 		  onItemSelect: function() {
+		  	console.log($scope.measures.model);
 			$scope.claimChanged();
 		  }
 		}
