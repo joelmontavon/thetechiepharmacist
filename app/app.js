@@ -3,7 +3,7 @@ var app = angular.module('app', [
   'ngSanitize', 
   'ngRoute',
   'ui.select',
-  'ui.calendar',
+  'ui.calendar', 
   'angularjs-dropdown-multiselect',
   'routes',
   'directives',

@@ -90,7 +90,7 @@ controllers.controller('controller', function($scope, $filter, $timeout, $locati
 			from: Date.getWithOffsetForTimezone('2016-01-01'),
 			thru: Date.getWithOffsetForTimezone('2016-12-31')
 		});
-		$scope.eligChanged();
+		$scope.eligChanged(); 
 	};
   
 	$scope.removeElig = function (date) {

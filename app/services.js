@@ -165,7 +165,7 @@ services.factory("graphService", ["$filter", "_",
               }
             };
           break;
-      }
+      } 
       if (Object.keys(options).length) return c3.generate(options);
     };
 	

@@ -4,7 +4,7 @@ services.factory("graphs", ["d3",
 		return function (data) {
 			var width = 1200,
 				height = 150,
-				cellSize = 19; // cell size
+				cellSize = 19; // cell size 
 
 			var percent = d3.format(".1%"),
 				format = d3.time.format("%Y-%m-%d");

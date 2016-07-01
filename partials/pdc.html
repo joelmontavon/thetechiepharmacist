@@ -54,6 +54,7 @@
 			<div>Days in Measurement Period: {{adherence.daysInMeasurementPeriod[thruNbr]}}</div>
 			<div>Days Covered: {{adherence.daysCovered[thruNbr]}}</div>
 			<div>Proportion of Days Covered: {{adherence.pdc[thruNbr - fromNbr + 1] | percentage}}</div>
+			<div>Pattern: {{adherence.daysLate.profile}}</div>
 			<div>Adherent: <span my-new-check="adherence.thresholdExceeded[thruNbr - fromNbr + 1]"></span></div>
 		  </div>
 		</div>
@@ -95,7 +96,7 @@
 				  </td>
 				</tr>
 			  </tbody>
-			</table>
+			</table> 
 		  </div>
 		  <div class="col-xs-6">
 			<div>Age: {{dob.yearsFrom(thruDt)}}</div>
@@ -103,7 +104,7 @@
 		</div>
 	  </div>
 	</div>
-	<div ng-show="contEnroll" class="panel panel-default">
+	<div ng-show="contEnroll" class="panel panel-default"> 
 	  <div class="panel-heading" role="tab" id="headingThree">
 		<h3 class="panel-title">
 		  <a data-toggle="collapse" data-target="#collapseThree" data-parent="#accordion" href="#collapseThree" aria-expanded="true" aria-controls="collapseThree">Eligibility</a>
@@ -283,8 +284,10 @@
 		</div>
 	  </div>
 	  <div class="row>">
-		<div ng-show="display == 0" class="col-md-4 col-xs-6" style="max-height: 320px; overflow: auto;">
-		  <table class="table table-condensed">
+		<div ng-show="display == 0"  style="height: 320px;">
+		<!--<div ng-show="display == 0" class="col-md-4 col-xs-6" style="max-height: 320px; overflow: auto;">-->
+		  <div id="calendar"></div>
+		  <!--<table class="table table-condensed">
 			<thead>
 			  <tr>
 				<th>Date</th>
@@ -299,7 +302,7 @@
 				</td>
 			  </tr>
 			</tbody>
-		  </table>
+		  </table>-->
 		</div>
 		<div ng-show="display == 1 || display == 2" id="chart" style="height: 320px"></div>
 	  </div>
