@@ -4,6 +4,10 @@ Date.prototype.stdTimezoneOffset = function() {
     return Math.max(jan.getTimezoneOffset(), jul.getTimezoneOffset());
 }
 
+Date.prototype.dst = function() {
+    return this.getTimezoneOffset() < this.stdTimezoneOffset();
+}
+
 Date.prototype.addDays = function(days) {
     this.setDate(this.getDate() + days);
     return this;
@@ -24,6 +28,7 @@ Date.prototype.yearsFrom = function(date) {
 
 Date.prototype.offsetForTimezone = function() {
     this.setTime(this.getTime() + this.stdTimezoneOffset()*60*1000);
+	//this.setHours(12);
     return this;
 };
 
@@ -35,6 +40,15 @@ Date.getWithOffsetForTimezone = function (val) {
   var date = val ? new Date(val) : new Date();
   date.offsetForTimezone();
   return date;
+};
+
+Date.prototype.toStdString = function () {
+  var year = this.getFullYear();
+  var month = this.getMonth() + 1;
+  if (month < 10) month = '0' + month;
+  var day = this.getDate();
+  if (day < 10) day = '0' + day;
+  return year + '-' + month + '-' + day;
 };
 
 Date.epoch = function () {

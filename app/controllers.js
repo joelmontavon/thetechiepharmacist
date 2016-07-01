@@ -1,5 +1,5 @@
 var controllers = angular.module('controllers', []);
-controllers.controller('controller', function($scope, $filter, $timeout, $location, _, pdcService, eligService, drugsService, opioidsService, graphService) {
+controllers.controller('controller', function($scope, $filter, $timeout, $location, _, pdcService, eligService, drugsService, opioidsService, graphService, graphs) {
 	$scope.toDate = Date.getWithDaysFromEpoch;
 	$scope.drugsService = drugsService;
 
@@ -8,16 +8,23 @@ controllers.controller('controller', function($scope, $filter, $timeout, $locati
 	$scope.dob = Date.getWithOffsetForTimezone('1997-12-31');
 	$scope.elig = [];
 	$scope.claims = [];
+	$scope.eventSources = [];
 	$scope.display = 1;
+	
+	$scope.uiConfig = {
+      calendar:{
+	  aspectRatio: .8
+	  }
+    };
   
 	drugsService.getDrugs().then(function (data) {
 		$scope.drugs = data;
-		/*$scope.elig = [
+		$scope.elig = [
 			{seq: '001', from: Date.getWithOffsetForTimezone('2016-01-01'), thru: Date.getWithOffsetForTimezone('2016-06-30')}
 		];
 		eligCtr = 1001;
 		$scope.eligChanged();
-		$scope.claims = [
+		/*$scope.claims = [
 		  {number: '001', drug: {"fullName":"Metformin hydrochloride 500 MG Oral Tablet","termType":"SCD","rxcui":"861007"}, dateOfFill: Date.getWithOffsetForTimezone('2015-01-06'), qty:30, daysSupply: 30, md: '1234567890', pharm: '1234567890'},
 		  {number: '002', drug: {"fullName":"Glyburide 5 MG Oral Tablet","termType":"SCD","rxcui":"310537"}, dateOfFill: Date.getWithOffsetForTimezone('2015-01-06'), qty:30, daysSupply: 30},
 		  {number: '003', drug: {"fullName":"Metformin hydrochloride 500 MG Oral Tablet","termType":"SCD","rxcui":"861007"}, dateOfFill: Date.getWithOffsetForTimezone('2015-02-15'), qty:30, daysSupply: 30},
@@ -29,13 +36,18 @@ controllers.controller('controller', function($scope, $filter, $timeout, $locati
 		];
 		$scope.claims.forEach( function (claim) {
 		  $scope.drugSelected(claim);
+		});*/
+		var claims = [{"number":"001","drug":{"brandName":"","displayName":"metFORMIN (Oral Pill)","synonym":"","fullName":"Metformin hydrochloride 500 MG Oral Tablet","fullGenericName":"Metformin hydrochloride 500 MG Oral Tablet","strength":"500 mg","rxtermsDoseForm":"Tab","route":"Oral Pill","termType":"SCD","rxcui":"861007","genericRxcui":"0","rxnormDoseForm":"Oral Tablet","suppress":"","brand":false,"components":[{"rxcui":"860974","name":"Metformin hydrochloride 500 MG","strength":500,"uom":"MG","ingredient":"Metformin","classes":[{"id":"A10BD","name":"Combinations of oral blood glucose lowering drugs"},{"id":"A10BD","name":"Combinations of oral blood glucose lowering drugs"},{"id":"A10BD","name":"Combinations of oral blood glucose lowering drugs"},{"id":"A10BD","name":"Combinations of oral blood glucose lowering drugs"},{"id":"A10BD","name":"Combinations of oral blood glucose lowering drugs"},{"id":"A10BD","name":"Combinations of oral blood glucose lowering drugs"},{"id":"A10BD","name":"Combinations of oral blood glucose lowering drugs"},{"id":"A10BD","name":"Combinations of oral blood glucose lowering drugs"},{"id":"A10BA","name":"Biguanides"},{"id":"A10BD","name":"Combinations of oral blood glucose lowering drugs"},{"id":"A10BD","name":"Combinations of oral blood glucose lowering drugs"}]}]},"dateOfFill":"2016-01-06T06:00:00.000Z","qty":30,"daysSupply":30,"md":"1234567890","pharm":"1234567890","$$hashKey":"05N"},{"number":"002","drug":{"brandName":"","displayName":"glyBURIDE (Oral Pill)","synonym":"","fullName":"Glyburide 5 MG Oral Tablet","fullGenericName":"Glyburide 5 MG Oral Tablet","strength":"5 mg","rxtermsDoseForm":"Tab","route":"Oral Pill","termType":"SCD","rxcui":"310537","genericRxcui":"0","rxnormDoseForm":"Oral Tablet","suppress":"","brand":false,"components":[{"rxcui":"315991","name":"Glyburide 5 MG","strength":5,"uom":"MG","ingredient":"Glyburide","classes":[{"id":"A10BB","name":"Sulfonylureas"}]}]},"dateOfFill":"2016-01-06T06:00:00.000Z","qty":30,"daysSupply":30,"$$hashKey":"05O"},{"number":"003","drug":{"brandName":"","displayName":"metFORMIN (Oral Pill)","synonym":"","fullName":"Metformin hydrochloride 500 MG Oral Tablet","fullGenericName":"Metformin hydrochloride 500 MG Oral Tablet","strength":"500 mg","rxtermsDoseForm":"Tab","route":"Oral Pill","termType":"SCD","rxcui":"861007","genericRxcui":"0","rxnormDoseForm":"Oral Tablet","suppress":"","brand":false,"components":[{"rxcui":"860974","name":"Metformin hydrochloride 500 MG","strength":500,"uom":"MG","ingredient":"Metformin","classes":[{"id":"A10BD","name":"Combinations of oral blood glucose lowering drugs"},{"id":"A10BD","name":"Combinations of oral blood glucose lowering drugs"},{"id":"A10BD","name":"Combinations of oral blood glucose lowering drugs"},{"id":"A10BD","name":"Combinations of oral blood glucose lowering drugs"},{"id":"A10BD","name":"Combinations of oral blood glucose lowering drugs"},{"id":"A10BD","name":"Combinations of oral blood glucose lowering drugs"},{"id":"A10BD","name":"Combinations of oral blood glucose lowering drugs"},{"id":"A10BD","name":"Combinations of oral blood glucose lowering drugs"},{"id":"A10BA","name":"Biguanides"},{"id":"A10BD","name":"Combinations of oral blood glucose lowering drugs"},{"id":"A10BD","name":"Combinations of oral blood glucose lowering drugs"}]}]},"dateOfFill":"2016-02-15T06:00:00.000Z","qty":30,"daysSupply":30,"$$hashKey":"05P"},{"number":"004","drug":{"brandName":"","displayName":"glyBURIDE (Oral Pill)","synonym":"","fullName":"Glyburide 5 MG Oral Tablet","fullGenericName":"Glyburide 5 MG Oral Tablet","strength":"5 mg","rxtermsDoseForm":"Tab","route":"Oral Pill","termType":"SCD","rxcui":"310537","genericRxcui":"0","rxnormDoseForm":"Oral Tablet","suppress":"","brand":false,"components":[{"rxcui":"315991","name":"Glyburide 5 MG","strength":5,"uom":"MG","ingredient":"Glyburide","classes":[{"id":"A10BB","name":"Sulfonylureas"}]}]},"dateOfFill":"2016-02-15T06:00:00.000Z","qty":30,"daysSupply":30,"$$hashKey":"05Q"},{"number":"005","drug":{"brandName":"","displayName":"GlyBURIDE/metFORMIN (Oral Pill)","synonym":"","fullName":"Glyburide 5 MG / Metformin hydrochloride 500 MG Oral Tablet","fullGenericName":"Glyburide 5 MG / Metformin hydrochloride 500 MG Oral Tablet","strength":"5-500 mg","rxtermsDoseForm":"Tab","route":"Oral Pill","termType":"SCD","rxcui":"861753","genericRxcui":"0","rxnormDoseForm":"Oral Tablet","suppress":"","brand":false,"components":[{"rxcui":"315991","name":"Glyburide 5 MG","strength":5,"uom":"MG","ingredient":"Glyburide","classes":[{"id":"A10BB","name":"Sulfonylureas"}]},{"rxcui":"860974","name":"Metformin hydrochloride 500 MG","strength":500,"uom":"MG","ingredient":"Metformin","classes":[{"id":"A10BD","name":"Combinations of oral blood glucose lowering drugs"},{"id":"A10BD","name":"Combinations of oral blood glucose lowering drugs"},{"id":"A10BD","name":"Combinations of oral blood glucose lowering drugs"},{"id":"A10BD","name":"Combinations of oral blood glucose lowering drugs"},{"id":"A10BD","name":"Combinations of oral blood glucose lowering drugs"},{"id":"A10BD","name":"Combinations of oral blood glucose lowering drugs"},{"id":"A10BD","name":"Combinations of oral blood glucose lowering drugs"},{"id":"A10BD","name":"Combinations of oral blood glucose lowering drugs"},{"id":"A10BA","name":"Biguanides"},{"id":"A10BD","name":"Combinations of oral blood glucose lowering drugs"},{"id":"A10BD","name":"Combinations of oral blood glucose lowering drugs"}]}]},"dateOfFill":"2016-02-28T06:00:00.000Z","qty":30,"daysSupply":30,"$$hashKey":"05R"},{"number":"006","drug":{"brandName":"","displayName":"GlyBURIDE/metFORMIN (Oral Pill)","synonym":"","fullName":"Glyburide 5 MG / Metformin hydrochloride 500 MG Oral Tablet","fullGenericName":"Glyburide 5 MG / Metformin hydrochloride 500 MG Oral Tablet","strength":"5-500 mg","rxtermsDoseForm":"Tab","route":"Oral Pill","termType":"SCD","rxcui":"861753","genericRxcui":"0","rxnormDoseForm":"Oral Tablet","suppress":"","brand":false,"components":[{"rxcui":"315991","name":"Glyburide 5 MG","strength":5,"uom":"MG","ingredient":"Glyburide","classes":[{"id":"A10BB","name":"Sulfonylureas"}]},{"rxcui":"860974","name":"Metformin hydrochloride 500 MG","strength":500,"uom":"MG","ingredient":"Metformin","classes":[{"id":"A10BD","name":"Combinations of oral blood glucose lowering drugs"},{"id":"A10BD","name":"Combinations of oral blood glucose lowering drugs"},{"id":"A10BD","name":"Combinations of oral blood glucose lowering drugs"},{"id":"A10BD","name":"Combinations of oral blood glucose lowering drugs"},{"id":"A10BD","name":"Combinations of oral blood glucose lowering drugs"},{"id":"A10BD","name":"Combinations of oral blood glucose lowering drugs"},{"id":"A10BD","name":"Combinations of oral blood glucose lowering drugs"},{"id":"A10BD","name":"Combinations of oral blood glucose lowering drugs"},{"id":"A10BA","name":"Biguanides"},{"id":"A10BD","name":"Combinations of oral blood glucose lowering drugs"},{"id":"A10BD","name":"Combinations of oral blood glucose lowering drugs"}]}]},"dateOfFill":"2016-03-30T06:00:00.000Z","qty":30,"daysSupply":30,"$$hashKey":"05S"},{"number":"007","drug":{"brandName":"","displayName":"GlyBURIDE/metFORMIN (Oral Pill)","synonym":"","fullName":"Glyburide 5 MG / Metformin hydrochloride 500 MG Oral Tablet","fullGenericName":"Glyburide 5 MG / Metformin hydrochloride 500 MG Oral Tablet","strength":"5-500 mg","rxtermsDoseForm":"Tab","route":"Oral Pill","termType":"SCD","rxcui":"861753","genericRxcui":"0","rxnormDoseForm":"Oral Tablet","suppress":"","brand":false,"components":[{"rxcui":"315991","name":"Glyburide 5 MG","strength":5,"uom":"MG","ingredient":"Glyburide","classes":[{"id":"A10BB","name":"Sulfonylureas"}]},{"rxcui":"860974","name":"Metformin hydrochloride 500 MG","strength":500,"uom":"MG","ingredient":"Metformin","classes":[{"id":"A10BD","name":"Combinations of oral blood glucose lowering drugs"},{"id":"A10BD","name":"Combinations of oral blood glucose lowering drugs"},{"id":"A10BD","name":"Combinations of oral blood glucose lowering drugs"},{"id":"A10BD","name":"Combinations of oral blood glucose lowering drugs"},{"id":"A10BD","name":"Combinations of oral blood glucose lowering drugs"},{"id":"A10BD","name":"Combinations of oral blood glucose lowering drugs"},{"id":"A10BD","name":"Combinations of oral blood glucose lowering drugs"},{"id":"A10BD","name":"Combinations of oral blood glucose lowering drugs"},{"id":"A10BA","name":"Biguanides"},{"id":"A10BD","name":"Combinations of oral blood glucose lowering drugs"},{"id":"A10BD","name":"Combinations of oral blood glucose lowering drugs"}]}]},"dateOfFill":"2016-04-28T06:00:00.000Z","qty":30,"daysSupply":30,"$$hashKey":"05T"},{"number":"008","drug":{"brandName":"","displayName":"GlyBURIDE/metFORMIN (Oral Pill)","synonym":"","fullName":"Glyburide 5 MG / Metformin hydrochloride 500 MG Oral Tablet","fullGenericName":"Glyburide 5 MG / Metformin hydrochloride 500 MG Oral Tablet","strength":"5-500 mg","rxtermsDoseForm":"Tab","route":"Oral Pill","termType":"SCD","rxcui":"861753","genericRxcui":"0","rxnormDoseForm":"Oral Tablet","suppress":"","brand":false,"components":[{"rxcui":"315991","name":"Glyburide 5 MG","strength":5,"uom":"MG","ingredient":"Glyburide","classes":[{"id":"A10BB","name":"Sulfonylureas"}]},{"rxcui":"860974","name":"Metformin hydrochloride 500 MG","strength":500,"uom":"MG","ingredient":"Metformin","classes":[{"id":"A10BD","name":"Combinations of oral blood glucose lowering drugs"},{"id":"A10BD","name":"Combinations of oral blood glucose lowering drugs"},{"id":"A10BD","name":"Combinations of oral blood glucose lowering drugs"},{"id":"A10BD","name":"Combinations of oral blood glucose lowering drugs"},{"id":"A10BD","name":"Combinations of oral blood glucose lowering drugs"},{"id":"A10BD","name":"Combinations of oral blood glucose lowering drugs"},{"id":"A10BD","name":"Combinations of oral blood glucose lowering drugs"},{"id":"A10BD","name":"Combinations of oral blood glucose lowering drugs"},{"id":"A10BA","name":"Biguanides"},{"id":"A10BD","name":"Combinations of oral blood glucose lowering drugs"},{"id":"A10BD","name":"Combinations of oral blood glucose lowering drugs"}]}]},"dateOfFill":"2016-05-25T06:00:00.000Z","qty":30,"daysSupply":30,"$$hashKey":"05U"}];
+		claims.forEach(function (claim) {
+			claim.dateOfFill = new Date(claim.dateOfFill);
 		});
+		$scope.claims = claims;
 		claimsCtr = 1008;
 		$timeout( function () {
 		  $scope.claimChanged();
-		});*/
-		$scope.clearElig();
-		$scope.clearClaims();
+		});
+		/*$scope.clearElig();
+		$scope.clearClaims();*/
 	});
   
 	var measures = [{id:'A10B', label:'Diabetes Medications'}, {id:'C09', label:'Renin Angiotensin System (RAS) Antagonists'}, {id:'C10AA', label:'Statin Medications'}];
@@ -109,12 +121,14 @@ controllers.controller('controller', function($scope, $filter, $timeout, $locati
 			if ($scope.claims.length) {
 				if ($scope.type == 'pdc') {
 					$scope.adherence = pdcService.adherence($scope.claims, $scope.fromNbr, $scope.thruNbr, [$scope.measures.model.id]);
+					//console.log($scope.adherence);
 					$scope.graph = graphService.pdcGraph($scope.adherence, $scope.fromNbr, $scope.thruNbr, $scope.display);
+					graphs($scope.adherence.calendar);
 				} else if ($scope.type == 'med') {
 					$scope.opioids = opioidsService.opioids($scope.claims, $scope.fromNbr, $scope.thruNbr);
 					$scope.graph = graphService.opioidGraph($scope.opioids, $scope.fromNbr, $scope.thruNbr, $scope.display);
 				}
-				//console.log($scope.claims, $scope.adherence);
+				console.log(JSON.stringify($scope.claims), $scope.claims, $scope.adherence);
 			}
 		});
 	};

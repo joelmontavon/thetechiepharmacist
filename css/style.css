@@ -133,3 +133,18 @@ span.glyphicon-menu-hamburger {
 	  #eee 20px
 	);
 }
+
+.day {
+  fill: #fff;
+  stroke: #ccc;
+}
+
+.month {
+  fill: none;
+  stroke: #000;
+  stroke-width: 2px;
+}
+
+.RdYlGn .green{fill:#5cb85c}
+.RdYlGn .red{fill:#d9534f}
+.RdYlGn .white{fill:none}

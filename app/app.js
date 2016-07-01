@@ -3,11 +3,13 @@ var app = angular.module('app', [
   'ngSanitize', 
   'ngRoute',
   'ui.select',
+  'ui.calendar',
   'angularjs-dropdown-multiselect',
   'routes',
   'directives',
   'services',
   'controllers',
+  'graphs',
   'filters'
 ]);
 /*app.config (['$locationProvider', function ($locationProvider) {

@@ -2,6 +2,9 @@ var services = angular.module('services', []);
 services.factory("_", function() {
     return window._;
 });
+services.factory("d3", function() {
+  return window.d3;
+});
 services.factory("graphService", ["$filter", "_",
   function($filter, _) {
     var _columns = function (claims) {
@@ -163,7 +166,6 @@ services.factory("graphService", ["$filter", "_",
             };
           break;
       }
-	  console.log('pdcGraph');
       if (Object.keys(options).length) return c3.generate(options);
     };
 	
@@ -307,6 +309,61 @@ services.factory("pdcService", ["_",
       });
       return result;
     };
+	var _daysLate = function (sortedClaims, thru) {
+		var result = {
+			daysLate: [],
+			daysLateBand: [],
+			daysLate3: 0,
+			daysLate7: 0,
+			daysLate14: 0,
+			daysLate30: 0,
+			stopped: false,
+			significantGap: false,
+			increasing: 0,
+			decreasing: 0,
+			trend: '',
+			pattern: '',
+			profile: ''
+		};
+		var ctr = 0;
+		for (i = 1; i < sortedClaims.length; i++) {
+			result.daysLate[i-1] = Math.max(sortedClaims[i].dateOfFill.getDaysFromEpoch() - sortedClaims[i-1].dateOfLastDose.getDaysFromEpoch() - 1, 0);
+		}
+		if (result.daysLate.length) result.daysLate.push(Math.max(thru - sortedClaims[sortedClaims.length-1].dateOfLastDose.getDaysFromEpoch() - 1, 0));
+		for (i = 0; i < result.daysLate.length; i++) {
+			if (result.daysLate[i] > 3) result.daysLate3 += 1;
+			if (result.daysLate[i] > 7) result.daysLate7 += 1;
+			if (result.daysLate[i] > 14) result.daysLate14 += 1;
+			if (result.daysLate[i] > 30) result.daysLate30 += 1;
+			if (result.daysLate[i] == 0) result.daysLateBand[i] = 0;
+				else if (result.daysLate[i] <= 3) result.daysLateBand[i] = 1;
+				else if (result.daysLate[i] <= 7) result.daysLateBand[i] = 2;
+				else if (result.daysLate[i] <= 14) result.daysLateBand[i] = 3;
+				else result.daysLateBand[i] = 4;
+			if (result.daysLate[i] > 30) result.stopped = true;
+				else result.stopped = false;
+		}
+		if (result.stopped) result.pattern = 'Discontinued';
+			else if (result.daysLate30) result.pattern = 'Significant gap(s)';
+			else if (result.daysLate14 > 1) result.pattern = 'Several gap';
+			else if (result.daysLate7/result.daysLate.length >= 0.5) result.pattern = 'Highly inconsistent';
+			else if (result.daysLate3/result.daysLate.length >= 0.5) result.pattern = 'Inconsistent';
+			else result.pattern = 'Consistent';
+		for (i = result.daysLate.length - 1; i >= 1; i--) {
+			if (!result.significantGap && ctr < 3) {
+				if (result.daysLateBand[i-1] < result.daysLateBand[i]) result.increasing += 1;
+					else if (result.daysLateBand[i-1] > result.daysLateBand[i]) result.decreasing += 1;
+				if (result.daysLateBand[i-1] > 14) result.significantGap = true;
+			}
+		}
+		if (result.pattern != 'Discontinued') {
+			if (!result.decreasing && result.increasing) result.trend = ' with downward trend'
+				else if (result.decreasing > 1 && !result.increasing) result.trend = ' with strong upward trend';
+				else if (result.decreasing && !result.increasing) result.trend = ' with upward trend';
+		}
+		result.profile = result.pattern + result.trend;
+		return result;
+	};
     var _drugsCovered = function (adjustedForOverlap, from, thru) {
       var result = {};
       for (var i = from; i <= thru; i++) {
@@ -355,6 +412,20 @@ services.factory("pdcService", ["_",
       }
       return result;
     };
+    var _calendar = function (drugsCovered, from, thru, threshold, index) {
+      threshold = threshold || 1;
+      var result = {};
+      var val = null;
+      for (var i = from; i <= thru; i++) {
+		if (drugsCovered[i] >= threshold) {
+		  val = 1;
+		} else {
+		  val = val === null ? null : 0;
+		}
+		result[Date.getWithDaysFromEpoch(i).toStdString().substring(0, 10)] = val;
+      }
+      return result;
+    };
     var _pdc = function (daysInMeasurementPeriod, daysCovered, from, thru) {
       var result = ['pdc'];
       var val = null;
@@ -393,10 +464,12 @@ services.factory("pdcService", ["_",
       var uniqueDatesOfFill = _uniqueDatesOfFill(sortedClaims);
       var span = _span(sortedClaims);
       var adjustedForOverlap = _adjustForOverlap(sortedClaims, from, thru);
+	  var daysLate = _daysLate(sortedClaims, thru);
       var drugsCovered = _drugsCovered(adjustedForOverlap, from, thru);
       var indexDate = _indexDate(drugsCovered, from, thru);
       var daysInMeasurementPeriod = _daysInMeasurementPeriod(drugsCovered, from, thru, threshold);
       var daysCovered = _daysCovered(drugsCovered, from, thru, threshold);
+	  var calendar = _calendar(drugsCovered, from, thru, threshold, indexDate);
       var pdc = _pdc(daysInMeasurementPeriod, daysCovered, from, thru);
       var period = _period(from, thru);
       var thresholdExceeded = _thresholdExceeded(pdc, threshold);
@@ -406,9 +479,11 @@ services.factory("pdcService", ["_",
         uniqueDatesOfFill: uniqueDatesOfFill,
         span: span,
         claims: sortedClaims,
+		daysLate: daysLate,
         drugsCovered: drugsCovered,
         daysInMeasurementPeriod: daysInMeasurementPeriod,
         daysCovered: daysCovered,
+		calendar: calendar,
         pdc: pdc,
         thresholdExceeded: thresholdExceeded
       };
