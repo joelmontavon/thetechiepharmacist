@@ -1,0 +1,67 @@
+Innovative Methods of Measuring and Visualizing Medication Adherence
+About Me
+…
+Predictive Analytics
+Sources of Data:
+•	Patient enrollment and demographics
+•	Medical, pharmacy, and lab claims
+•	Care management systems
+•	Census
+•	Propriety databases (income, education, consumer buying habits, etc.)
+Predictors of Adherence:
+•	Length of time in plan
+•	Low income status
+•	Primary language
+•	Patient’s location (median household income, education level, CMS risk adjustment score, number and proximity of pharmacies to patient, etc.)
+•	Member’s drug spend
+•	Number of drugs taken
+•	Refill history
+•	Prior adherence status
+•	Days supply
+•	Pharmacy network status
+•	Specific pharmacy or pharmacy chain
+•	Specific drug class and/or drug
+•	Particular disease states/conditions (depression, behavioral health, obesity, etc.)
+•	Lab values (BMI, a1c)
+•	Number of pharmacies visited
+•	Number of prescribers visited
+•	Information gathered from prior outreaches (reached, barrier questions)
+
+Problem
+Data is often not displayed in a way that allows the clinician to make the appropriate assessment in a short period of time
+Current methods of measuring medication adherence do not provide the whole picture
+
+Why Adherence is Important
+…
+Methods of measuring non-adherence
+1.	Medication Possession Ratio (MPR) 
+2.	Proportion of Days Covered (PDC)—current Gold Standard
+
+PDC
+•	Percent of days in the measurement period “covered” by prescription claims for the same medication or medications in its therapeutic category
+•	Measurement period starts with first claim for the year in the therapeutic category 
+•	Overlapping prescriptions for the same drug is defined by active ingredient at the generic name level using the Medi-Span generic ingredient name
+•	Adjusts for inpatient (IP) settings, hospice enrollments, and stays in skilled nursing facilities (SNFs)
+•	When a member switches from one drug to another drug in the same drug class, if the two drugs contain any of the same ingredients, we assume that the member will finish out the current drug before starting on the new drug. If the member switches to a drug that does not contain any of the same ingredients, we assume that member stops the current medication and starts the new medication right away.
+Short-comings of PDC
+•	Only gives you a snapshot of medication adherence
+•	Results can be skewed due to length of the measurement period (and, therefore, patients entering or leaving the plan)
+•	Results can be skewed by 30 vs 90 day supply
+Days Late to Refill
+•	Number of gaps between refills
+•	Length of gaps between refills
+•	Patterns/trends in the refill history
+Patterns/trends in refill history
+Patterns
+•	Discontinued medication
+•	Significant gap(s)
+•	Multiple gaps
+•	Inconsistent
+•	Consistent
+Trends
+•	Increasing
+•	Decreasing
+Pattern Examples
+…
+Results
+
