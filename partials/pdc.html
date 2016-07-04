@@ -54,8 +54,8 @@
 			((contEnroll && gap <= 31) || (!contEnroll && adherence.span >= 150)) && 
 			adherence.uniqueDatesOfFill >= 2 && 
 			adherence.daysInMeasurementPeriod[thruNbr] >= 91 && 
-			(measures.model.id == 'Statin Medications' || !esrd) && 
-			(measures.model.id != 'Diabetes Medications' || !insulin)" class="col-xs-6">
+			(measures.model.id == 'C10AA' || !esrd) && 
+			(measures.model.id != 'A10B' || !insulin)" class="col-xs-6">
 			<div class="col-offset-2">
 			  <div my-gauge my-value="{{adherence.pdc[thruNbr - fromNbr + 1] * 100}}"></div>
 			</div>
@@ -86,7 +86,7 @@
 					<div my-datepicker="dob" my-event="claimChanged()"></div>
 				  </td>
 				</tr>
-				<tr ng-show="measures.model.id == 'Diabetes Medications'">
+				<tr ng-show="measures.model.id == 'A10B'">
 				  <td>Patient on Insulin:</td>
 				  <td>
 					<div class="btn-group" ng-init="insulin = 0">
@@ -95,7 +95,7 @@
 					</div>
 				  </td>
 				</tr>
-				<tr ng-show="measures.model.id == 'Diabetes Medications' || measures.model.id == 'Renin Angiotensin System (RAS) Antagonists'">
+				<tr ng-show="measures.model.id == 'A10B' || measures.model.id == 'C09'">
 				  <td>Patient with End-Stage Renal Disease (ESRD):</td>
 				  <td>
 					<div class="btn-group" ng-init="esrd = 0">
@@ -269,14 +269,14 @@
 		</h3>
 	  </div>
 	</div>
-	<div ng-if="(measures.model.id == 'Diabetes Medications' || measures.model.id == 'Renin Angiotensin System (RAS) Antagonists') && esrd" class="panel panel-danger">
+	<div ng-if="(measures.model.id == 'A10B' || measures.model.id == 'C09') && esrd" class="panel panel-danger">
 	  <div class="panel-heading" role="tab" id="headingEight">
 		<h3 class="panel-title">
 		  <div data-toggle="collapse" data-target="#collapseEight" data-parent="#accordion" href="#collapseEights" aria-expanded="true" aria-controls="collapseEight">Patients with end-stage renal disease (ESRD) are excluded.</div>
 		</h3>
 	  </div>
 	</div>
-	<div ng-if="measures.model.id == 'Diabetes Medications' && insulin" class="panel panel-danger">
+	<div ng-if="measures.model.id == 'A10B' && insulin" class="panel panel-danger">
 	  <div class="panel-heading" role="tab" id="headingNine">
 		<h3 class="panel-title">
 		  <div data-toggle="collapse" data-target="#collapseNine" data-parent="#accordion" href="#collapseNine" aria-expanded="true" aria-controls="collapseNine">Patients who have one or more prescriptions for insulin in the measurement period are excluded.</div>
@@ -288,8 +288,8 @@
 			((contEnroll && gap <= 31) || (!contEnroll && adherence.span >= 150)) && 
 			adherence.uniqueDatesOfFill >= 2 && 
 			adherence.daysInMeasurementPeriod[thruNbr] >= 91 && 
-			(measures.model.id == 'Statin Medications' || !esrd) && 
-			(measures.model.id != 'Diabetes Medications' || !insulin)">
+			(measures.model.id == 'C10AA' || !esrd) && 
+			(measures.model.id != 'A10B' || !insulin)">
 	  <div class="row">
 		<div class="btn-group">
 		  <label class="btn btn-primary" ng-model="display" btn-radio="0">Days Covered</label>
