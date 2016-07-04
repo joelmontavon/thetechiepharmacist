@@ -1,7 +1,7 @@
 var graphs = angular.module('graphs', []);
 services.factory("graphs", ["d3",
 	function (d3) {
-		return function (data) {
+		return function (data, from, thru) {
 			var width = 1200,
 				height = 150,
 				cellSize = 19; // cell size 
@@ -15,7 +15,7 @@ services.factory("graphs", ["d3",
 			
 			d3.select("#calendar").selectAll("svg").remove();
 			var svg = d3.select("#calendar").selectAll("svg")
-				.data(d3.range(2016, 2017))
+				.data(d3.range(from.getFullYear(), thru.getFullYear() + 1))
 			  .enter().append("svg")
 				.attr("width", width)
 				.attr("height", height)

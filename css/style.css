@@ -70,6 +70,7 @@ body {
 
 .sidebar {
   display: none;
+  width: 250px;
 }
 @media (min-width: 768px) {
   .sidebar {

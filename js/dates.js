@@ -14,7 +14,7 @@ Date.prototype.addDays = function(days) {
 };
 
 Date.prototype.daysFrom = function(date) {
-    return Math.floor((this - date) / (1000*60*60*24));
+    return Math.floor((Date.UTC(this.getFullYear(), this.getMonth(), this.getDate()) - Date.UTC(date.getFullYear(), date.getMonth(), date.getDate())) / (1000*60*60*24));
 };
 
 Date.prototype.yearsFrom = function(date) {
@@ -28,7 +28,6 @@ Date.prototype.yearsFrom = function(date) {
 
 Date.prototype.offsetForTimezone = function() {
     this.setTime(this.getTime() + this.stdTimezoneOffset()*60*1000);
-	//this.setHours(12);
     return this;
 };
 

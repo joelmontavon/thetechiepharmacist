@@ -75,6 +75,8 @@ services.factory("graphService", ["$filter", "_",
                 }
               },
               y: {
+				/*min: 0,
+				max: 1,*/
                 tick: {
                   format: function (d) {
                     var num = columns.length - d; 
@@ -135,6 +137,8 @@ services.factory("graphService", ["$filter", "_",
                   }
                 },
                 y: {
+				  min: 0,
+				  max: 1,
                   tick: {
                     format: function (d) { 
                       return $filter('percentage')(d);
@@ -307,12 +311,14 @@ services.factory("pdcService", ["_",
           claim.dateOfLastDose = Date.getWithDaysFromEpoch(dt - 1);
         }
       });
+	  
       return result;
     };
 	var _daysLate = function (sortedClaims, thru) {
 		var result = {
 			daysLate: [],
 			daysLateBand: [],
+			daysLate0: 0,
 			daysLate3: 0,
 			daysLate7: 0,
 			daysLate14: 0,
@@ -331,6 +337,7 @@ services.factory("pdcService", ["_",
 		}
 		if (result.daysLate.length) result.daysLate.push(Math.max(thru - sortedClaims[sortedClaims.length-1].dateOfLastDose.getDaysFromEpoch() - 1, 0));
 		for (i = 0; i < result.daysLate.length; i++) {
+			if (result.daysLate[i] > 0) result.daysLate0 += 1;
 			if (result.daysLate[i] > 3) result.daysLate3 += 1;
 			if (result.daysLate[i] > 7) result.daysLate7 += 1;
 			if (result.daysLate[i] > 14) result.daysLate14 += 1;
@@ -345,15 +352,15 @@ services.factory("pdcService", ["_",
 		}
 		if (result.stopped) result.pattern = 'Discontinued';
 			else if (result.daysLate30) result.pattern = 'Significant gap(s)';
-			else if (result.daysLate14 > 1) result.pattern = 'Several gap';
+			else if (result.daysLate14 > 1) result.pattern = 'Several gaps';
 			else if (result.daysLate7/result.daysLate.length >= 0.5) result.pattern = 'Highly inconsistent';
 			else if (result.daysLate3/result.daysLate.length >= 0.5) result.pattern = 'Inconsistent';
 			else result.pattern = 'Consistent';
-		for (i = result.daysLate.length - 1; i >= 1; i--) {
+		for (i = result.daysLate.length - 2; i >= 1; i--) {
 			if (!result.significantGap && ctr < 3) {
 				if (result.daysLateBand[i-1] < result.daysLateBand[i]) result.increasing += 1;
 					else if (result.daysLateBand[i-1] > result.daysLateBand[i]) result.decreasing += 1;
-				if (result.daysLateBand[i-1] > 14) result.significantGap = true;
+				if (result.daysLate[i-1] > 30) result.significantGap = true;
 			}
 		}
 		if (result.pattern != 'Discontinued') {

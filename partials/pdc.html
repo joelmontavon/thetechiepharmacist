@@ -11,6 +11,14 @@
 			<table>
 			  <tbody>
 				<tr>
+				  <td>Scenario:</td>
+				  <td>
+					<p class="input-group"></p>
+					<div ng-dropdown-multiselect="" selected-model="demos.model" options="demos.options" extra-settings="demos.settings" events="demos.events"></div>
+					<p></p>
+				  </td>
+				</tr>
+				<tr>
 				  <td>Measure:</td>
 				  <td>
 					<p class="input-group"></p>
@@ -54,7 +62,8 @@
 			<div>Days in Measurement Period: {{adherence.daysInMeasurementPeriod[thruNbr]}}</div>
 			<div>Days Covered: {{adherence.daysCovered[thruNbr]}}</div>
 			<div>Proportion of Days Covered: {{adherence.pdc[thruNbr - fromNbr + 1] | percentage}}</div>
-			<div>Pattern: {{adherence.daysLate.profile}}</div>
+			<!--<div>Gaps: {{adherence.daysLate.daysLate0 + ' (' + adherence.daysLate.daysLate.length + '%)'}}</div>-->
+			<div>Refill Pattern: {{adherence.daysLate.profile}}</div>
 			<div>Adherent: <span my-new-check="adherence.thresholdExceeded[thruNbr - fromNbr + 1]"></span></div>
 		  </div>
 		</div>
@@ -275,7 +284,12 @@
 	  </div>
 	</div>
   </div>
-	<div ng-show="adherence.claims">
+	<div ng-show="dob.yearsFrom(thruDt) >= 18 &&
+			((contEnroll && gap <= 31) || (!contEnroll && adherence.span >= 150)) && 
+			adherence.uniqueDatesOfFill >= 2 && 
+			adherence.daysInMeasurementPeriod[thruNbr] >= 91 && 
+			(measures.model.id == 'Statin Medications' || !esrd) && 
+			(measures.model.id != 'Diabetes Medications' || !insulin)">
 	  <div class="row">
 		<div class="btn-group">
 		  <label class="btn btn-primary" ng-model="display" btn-radio="0">Days Covered</label>
@@ -306,4 +320,4 @@
 		</div>
 		<div ng-show="display == 1 || display == 2" id="chart" style="height: 320px"></div>
 	  </div>
-	<div>
+	</div>
