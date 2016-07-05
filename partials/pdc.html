@@ -248,6 +248,7 @@
 	</div>
   </div>
 </div>
+  <div class="panel-group" role="tablist" aria-multiselectable="true">
 	<div ng-if="dob.yearsFrom(thruDt) < 18" class="panel panel-danger">
 	  <div class="panel-heading" role="tab" id="headingFive">
 		<h3 class="panel-title">
@@ -290,6 +291,7 @@
 		</h3>
 	  </div>
 	</div>
+  </div>
 <div ng-show="dob.yearsFrom(thruDt) >= 18 &&
 		((contEnroll && gap <= 31) || (!contEnroll && adherence.span >= 150)) && 
 		adherence.uniqueDatesOfFill >= 2 && 
