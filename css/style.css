@@ -125,6 +125,10 @@ span.glyphicon-menu-hamburger {
   margin-top: 0;
 }
 
+.panel-group {
+    margin-bottom: 5px;
+}
+
 .gray {
 	background: repeating-linear-gradient(
 	  45deg,

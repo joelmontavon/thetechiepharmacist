@@ -2,9 +2,9 @@ var graphs = angular.module('graphs', []);
 services.factory("graphs", ["d3",
 	function (d3) {
 		return function (data, from, thru) {
-			var width = 1200,
+			var width = 1075,
 				height = 150,
-				cellSize = 19; // cell size 
+				cellSize = 18; // cell size 
 
 			var percent = d3.format(".1%"),
 				format = d3.time.format("%Y-%m-%d");
@@ -50,7 +50,7 @@ services.factory("graphs", ["d3",
 		  rect.filter(function(d) { return d in data; })
 		    .attr("class", function(d) { return "day " + (data[d] === 1 ? 'green' : (data[d] === 0 ? 'red' : 'white')); })
 			.select("title")
-			  .text(function(d) { return d + ": " + percent(data[d]); });
+			  .text(function(d) { return d; });
 
 			function monthPath(t0) {
 			  var t1 = new Date(t0.getFullYear(), t0.getMonth() + 1, 0),

@@ -75,8 +75,6 @@ services.factory("graphService", ["$filter", "_",
                 }
               },
               y: {
-				/*min: 0,
-				max: 1,*/
                 tick: {
                   format: function (d) {
                     var num = columns.length - d; 
@@ -140,8 +138,8 @@ services.factory("graphService", ["$filter", "_",
 				  min: 0,
 				  max: 1,
                   tick: {
-                    format: function (d) { 
-                      return $filter('percentage')(d);
+                    format: function (d) {
+                      return (d >= 0 && d <= 1) ? $filter('percentage')(d) : '';
                     }
                   }
                 }

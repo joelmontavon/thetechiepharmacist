@@ -1,8 +1,8 @@
-  <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+  <div class="panel-group" id="accordionOne" role="tablist" aria-multiselectable="true">
 	<div class="panel panel-default">
 	  <div class="panel-heading" role="tab" id="headingOne">
 		<h3 class="panel-title">
-		  <a data-toggle="collapse" data-target="#collapseOne" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">Options</a>
+		  <a href="javascript:;" data-toggle="collapse" data-target="#collapseOne" data-parent="#accordionOne" aria-expanded="true" aria-controls="collapseOne">Options</a>
 		</h3>
 	  </div>
 	  <div id="collapseOne" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
@@ -15,7 +15,6 @@
 				  <td>
 					<p class="input-group"></p>
 					<div ng-dropdown-multiselect="" selected-model="demos.model" options="demos.options" extra-settings="demos.settings" events="demos.events"></div>
-					<p></p>
 				  </td>
 				</tr>
 				<tr>
@@ -69,10 +68,12 @@
 		</div>
 	  </div>
 	</div>
+  </div>
+  <div class="panel-group" id="accordionTwo" role="tablist" aria-multiselectable="true">
 	<div class="panel panel-default">
 	  <div class="panel-heading" role="tab" id="headingTwo">
 		<h3 class="panel-title">
-		  <a data-toggle="collapse" data-target="#collapseTwo" data-parent="#accordion" href="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">Patient</a>
+		  <a href="javascript:;" data-toggle="collapse" data-target="#collapseTwo" data-parent="#accordionTwo" aria-expanded="true" aria-controls="collapseTwo">Patient</a>
 		</h3>
 	  </div>
 	  <div id="collapseTwo" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingTwo">
@@ -113,10 +114,12 @@
 		</div>
 	  </div>
 	</div>
+  </div>
+  <div class="panel-group" id="accordionThree" role="tablist" aria-multiselectable="true">
 	<div ng-show="contEnroll" class="panel panel-default"> 
 	  <div class="panel-heading" role="tab" id="headingThree">
 		<h3 class="panel-title">
-		  <a data-toggle="collapse" data-target="#collapseThree" data-parent="#accordion" href="#collapseThree" aria-expanded="true" aria-controls="collapseThree">Eligibility</a>
+		  <a href="javascript:;" data-toggle="collapse" data-target="#collapseThree" data-parent="#accordionThree" aria-expanded="true" aria-controls="collapseThree">Eligibility</a>
 		</h3>
 	  </div>
 	  <div id="collapseThree" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingThree">
@@ -160,10 +163,12 @@
 		</div>
 	  </div>
 	</div>
+</div>
+  <div class="panel-group" id="accordionFour" role="tablist" aria-multiselectable="true">
 	<div class="panel panel-default">
 	  <div class="panel-heading" role="tab" id="headingFour">
 		<h3 class="panel-title">
-		  <a data-toggle="collapse" data-target="#collapseFour" data-parent="#accordion" href="#collapseFour" aria-expanded="true" aria-controls="collapseFour">Claims</a>
+		  <a href="javascript:;" data-toggle="collapse" data-target="#collapseFour" data-parent="#accordionFour" aria-expanded="true" aria-controls="collapseFour">Claims</a>
 		</h3>
 	  </div>
 	  <div id="collapseFour" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingFour">
@@ -241,83 +246,99 @@
 		</div>
 	  </div>
 	</div>
+  </div>
+</div>
 	<div ng-if="dob.yearsFrom(thruDt) < 18" class="panel panel-danger">
 	  <div class="panel-heading" role="tab" id="headingFive">
 		<h3 class="panel-title">
-		  <div data-toggle="collapse" data-target="#collapseFive" data-parent="#accordion" href="#collapseFive" aria-expanded="true" aria-controls="collapseFive">Must be 18 years and older as of the last day of the measurement period.</div>
+		  <div>Must be 18 years and older as of the last day of the measurement period.</div>
 		</h3>
 	  </div>
 	</div>
 	<div ng-if="(contEnroll && gap > 31) || (!contEnroll && adherence.span < 150)" class="panel panel-danger">
 	  <div class="panel-heading" role="tab" id="headingSix">
 		<h3 class="panel-title">
-		  <div data-toggle="collapse" data-target="#collapseSix" data-parent="#accordion" href="#collapseSix" aria-expanded="true" aria-controls="collapseSix">Must be continuously enrolled during the measurement period.</div>
+		  <div>Must be continuously enrolled during the measurement period.</div>
 		</h3>
 	  </div>
 	</div>
 	<div ng-if="adherence.uniqueDatesOfFill < 2" class="panel panel-danger">
 	  <div class="panel-heading" role="tab" id="headingSix">
 		<h3 class="panel-title">
-		  <div data-toggle="collapse" data-target="#collapseSix" data-parent="#accordion" href="#collapseSix" aria-expanded="true" aria-controls="collapseSix">Must have at least two prescriptions on two unique dates of service in the measurement period.</div>
+		  <div>Must have at least two prescriptions on two unique dates of service in the measurement period.</div>
 		</h3>
 	  </div>
 	</div>
 	<div ng-if="adherence.daysInMeasurementPeriod[thruNbr] < 91" class="panel panel-danger">
 	  <div class="panel-heading" role="tab" id="headingSeven">
 		<h3 class="panel-title">
-		  <div data-toggle="collapse" data-target="#collapseSeven" data-parent="#accordion" href="#collapseSeven" aria-expanded="true" aria-controls="collapseSeven">Index date must be at least 91 days before the end of the enrollment period.</div>
+		  <div>Index date must be at least 91 days before the end of the enrollment period.</div>
 		</h3>
 	  </div>
 	</div>
 	<div ng-if="(measures.model.id == 'A10B' || measures.model.id == 'C09') && esrd" class="panel panel-danger">
 	  <div class="panel-heading" role="tab" id="headingEight">
 		<h3 class="panel-title">
-		  <div data-toggle="collapse" data-target="#collapseEight" data-parent="#accordion" href="#collapseEights" aria-expanded="true" aria-controls="collapseEight">Patients with end-stage renal disease (ESRD) are excluded.</div>
+		  <div>Patients with end-stage renal disease (ESRD) are excluded.</div>
 		</h3>
 	  </div>
 	</div>
 	<div ng-if="measures.model.id == 'A10B' && insulin" class="panel panel-danger">
 	  <div class="panel-heading" role="tab" id="headingNine">
 		<h3 class="panel-title">
-		  <div data-toggle="collapse" data-target="#collapseNine" data-parent="#accordion" href="#collapseNine" aria-expanded="true" aria-controls="collapseNine">Patients who have one or more prescriptions for insulin in the measurement period are excluded.</div>
+		  <div>Patients who have one or more prescriptions for insulin in the measurement period are excluded.</div>
 		</h3>
 	  </div>
 	</div>
-  </div>
-	<div ng-show="dob.yearsFrom(thruDt) >= 18 &&
-			((contEnroll && gap <= 31) || (!contEnroll && adherence.span >= 150)) && 
-			adherence.uniqueDatesOfFill >= 2 && 
-			adherence.daysInMeasurementPeriod[thruNbr] >= 91 && 
-			(measures.model.id == 'C10AA' || !esrd) && 
-			(measures.model.id != 'A10B' || !insulin)">
-	  <div class="row">
-		<div class="btn-group">
-		  <label class="btn btn-primary" ng-model="display" btn-radio="0">Days Covered</label>
-		  <label class="btn btn-primary" ng-model="display" btn-radio="1">Overlap</label>
-		  <label class="btn btn-primary" ng-model="display" btn-radio="2">PDC</label>
-		</div>
+<div ng-show="dob.yearsFrom(thruDt) >= 18 &&
+		((contEnroll && gap <= 31) || (!contEnroll && adherence.span >= 150)) && 
+		adherence.uniqueDatesOfFill >= 2 && 
+		adherence.daysInMeasurementPeriod[thruNbr] >= 91 && 
+		(measures.model.id == 'C10AA' || !esrd) && 
+		(measures.model.id != 'A10B' || !insulin)">
+  <div class="panel-group" id="accordionTen" role="tablist" aria-multiselectable="true">
+	<div class="panel panel-default">
+	  <div class="panel-heading" role="tab" id="headingTen">
+		<h3 class="panel-title">
+		  <a href="javascript:;" data-toggle="collapse" data-target="#collapseTen" data-parent="#accordionTen" aria-expanded="true" aria-controls="collapseTen">Graphs</a>
+		</h3>
 	  </div>
-	  <div class="row>">
-		<div ng-show="display == 0"  style="height: 320px;">
-		<!--<div ng-show="display == 0" class="col-md-4 col-xs-6" style="max-height: 320px; overflow: auto;">-->
-		  <div id="calendar"></div>
-		  <!--<table class="table table-condensed">
-			<thead>
-			  <tr>
-				<th>Date</th>
-				<th>Covered</th>
-			  </tr>
-			</thead>
-			<tbody>
-			  <tr ng-repeat="(key, val) in adherence.drugsCovered">
-				<td>{{toDate(key) | date: 'shortDate'}}</td>
-				<td class="text-center">
-				  <span my-check="val"></span>
-				</td>
-			  </tr>
-			</tbody>
-		  </table>-->
+	  <div id="collapseTen" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingTen">
+		<div class="panel-body" style="margin: 10px; border: 0px;">
+			<div>
+			  <div class="row">
+				<div class="btn-group">
+				  <label class="btn btn-primary" ng-model="display" btn-radio="0">Days Covered</label>
+				  <label class="btn btn-primary" ng-model="display" btn-radio="1">Overlap</label>
+				  <label class="btn btn-primary" ng-model="display" btn-radio="2">PDC</label>
+				</div>
+			  </div>
+			  <div class="row>">
+				<div ng-show="display == 0"  style="height: 320px;">
+				<!--<div ng-show="display == 0" class="col-md-4 col-xs-6" style="max-height: 320px; overflow: auto;">-->
+				  <div id="calendar"></div>
+				  <!--<table class="table table-condensed">
+					<thead>
+					  <tr>
+						<th>Date</th>
+						<th>Covered</th>
+					  </tr>
+					</thead>
+					<tbody>
+					  <tr ng-repeat="(key, val) in adherence.drugsCovered">
+						<td>{{toDate(key) | date: 'shortDate'}}</td>
+						<td class="text-center">
+						  <span my-check="val"></span>
+						</td>
+					  </tr>
+					</tbody>
+				  </table>-->
+				</div>
+				<div ng-show="display == 1 || display == 2" id="chart" style="height: 320px"></div>
+			  </div>
+			</div>
+		  </div>
 		</div>
-		<div ng-show="display == 1 || display == 2" id="chart" style="height: 320px"></div>
 	  </div>
 	</div>
+  </div>
