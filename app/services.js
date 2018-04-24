@@ -168,6 +168,7 @@ services.factory("graphService", ["$filter", "_",
             };
           break;
       } 
+	console.log(options);
       if (Object.keys(options).length) return c3.generate(options);
     };
 	
