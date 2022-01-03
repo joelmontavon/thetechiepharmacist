@@ -1132,4 +1132,4 @@ controllers.controller('trendsController', function($scope, $filter, $timeout, $
 		$scope.contractTypeChanged();
 	});
 });
-controllers.controller('statinsController', function($scope, $filter, $timeout, $location, _) ());
+controllers.controller('statinsController', function($scope, $filter, $timeout, $location, _) {});
