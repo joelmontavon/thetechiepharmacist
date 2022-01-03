@@ -25,8 +25,7 @@ routes.config (['$routeProvider',
 		controller: 'trendsController',
 		templateUrl: '/partials/trends.html'
 	  }).
-	  when('/trends', {
-		controller: 'statinsConroller',
+	  when('/statins', {
 		templateUrl: '/partials/statins.html'
 	  }).
 	  when('/google2cab125c9ebd6b0b.html', {
