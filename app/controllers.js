@@ -1131,4 +1131,5 @@ controllers.controller('trendsController', function($scope, $filter, $timeout, $
 		$scope.starsData = data;
 		$scope.contractTypeChanged();
 	});
-});	
+});
+controllers.controller('statinsController', function($scope, $filter, $timeout, $location, _);
