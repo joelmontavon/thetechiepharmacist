@@ -146,7 +146,7 @@ CustomEl = {
             strength: strength
           });
         });
-        console.log(results)
+
         this.results = results;
       }
     },
@@ -158,10 +158,11 @@ CustomEl = {
         const linkElem = document.createElement('link');
         linkElem.setAttribute('rel', 'stylesheet');
         linkElem.setAttribute('href', href);
-        this.$el.appendChild(linkElem);
+        self.$el.appendChild(linkElem);
       }
       this.strengthChanged(this.strengthSelected);
     }
-  }
+}
+
 customEl = Vue.defineCustomElement(CustomEl)
 customElements.define('my-vue-element', customEl, {shadow: false})
