@@ -1,1 +1,10 @@
 <iframe src="https://joelmontavon.github.io/statin-conv-calc"></iframe>
+<script>
+	window.addEventListener('message', function(e) {
+    el = document.queryselector('iframe')
+		let message = e.data;
+
+		el.style.height = (message.height + 80) + 'px';
+		el.style.width = message.width + 'px';
+	} , false);
+</script>
