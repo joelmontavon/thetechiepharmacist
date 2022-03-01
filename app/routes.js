@@ -20,13 +20,22 @@ routes.config (['$routeProvider',
 	  when('/measures', {
 		controller: 'measuresController',
 		templateUrl: '/thetechiepharmacist/partials/measures.html'
-	  }).	  
+	  }).
 	  when('/trends', {
 		controller: 'trendsController',
 		templateUrl: '/thetechiepharmacist/partials/trends.html'
 	  }).
 	  when('/statins', {
 		templateUrl: '/thetechiepharmacist/partials/statins.html'
+	  }).
+    when('/icd10', {
+		templateUrl: '/thetechiepharmacist/partials/icd10.html'
+	  }).
+    when('/risk-adj', {
+		templateUrl: 'https://github.com/joelmontavon/risk-adj.html'
+	  }).
+    when('/cutpoints', {
+		templateUrl: '/thetechiepharmacist/partials/cutpoints.html'
 	  }).
 	  when('/google2cab125c9ebd6b0b.html', {
 		templateUrl: '/google2cab125c9ebd6b0b.html'
