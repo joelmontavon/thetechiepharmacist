@@ -32,7 +32,7 @@ routes.config (['$routeProvider',
 		templateUrl: '/thetechiepharmacist/partials/icd10.html'
 	  }).
     when('/risk-adj', {
-		templateUrl: 'https://github.com/joelmontavon/risk-adj.html'
+		templateUrl: '/thetechiepharmacist/partials/risk-adj.html'
 	  }).
     when('/cutpoints', {
 		templateUrl: '/thetechiepharmacist/partials/cutpoints.html'
