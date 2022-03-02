@@ -40,6 +40,12 @@ routes.config (['$routeProvider',
     when('/pdc-sas', {
 		templateUrl: '/thetechiepharmacist/partials/pdc-sas.html'
 	  }).
+    when('/mat', {
+		templateUrl: '/thetechiepharmacist/partials/mat.html'
+	  }).
+    when('/stars-trends', {
+		templateUrl: '/thetechiepharmacist/partials/stars-trends.html'
+	  }).
 	  when('/google2cab125c9ebd6b0b.html', {
 		templateUrl: '/google2cab125c9ebd6b0b.html'
 	  }).
