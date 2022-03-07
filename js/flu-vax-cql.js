@@ -1,4 +1,4 @@
-template = `
+fluTemplate = `
 <style>
 body {
   font-weight: 300;
@@ -457,7 +457,7 @@ class FluVaxCQL extends HTMLElement{
    constructor(){
      super();
      this.attachShadow({ mode: 'open'});
-     this.shadowRoot.innerHTML = template;
+     this.shadowRoot.innerHTML = fluTemplate;
    }
 
    connectedCallback() {
