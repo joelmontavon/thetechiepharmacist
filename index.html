@@ -33,6 +33,11 @@
     <link rel="stylesheet" href="css/table.css" />
 	<link rel="stylesheet" href="css/style.css" />
     <script src="lib/angularjs-dropdown-multiselect.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.9.1/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.9.1/ScrollTrigger.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/latest/plugins/AttrPlugin.min.js"></script>
+    <script src="https://d3js.org/d3.v4.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/holtzy/D3-graph-gallery@master/LIB/d3.layout.cloud.js"></script>
     <!--
       IE8 support, see AngularJS Internet Explorer Compatibility http://docs.angularjs.org/guide/ie
       For Firefox 3.6, you will also need to include jQuery and ECMAScript 5 shim
@@ -52,6 +57,8 @@
     <script src="js/dates.js"></script>
     <script src="js/console.js"></script>
     <script src="js/script.js"></script>
+    <script src="js/flu-vax-cql.js"></script>
+    <script src="js/home.js"></script>
     <script src="app/app.js"></script>
 	<script src="app/routes.js"></script>
     <script src="app/controllers.js"></script>
@@ -109,10 +116,11 @@
               <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><span class="glyphicon glyphicon-menu-hamburger"></span></a>
               <ul class="dropdown-menu" role="menu">
                 <li class="dropdown-header">Projects</li>
-			          <li><a href="#pdc">PDC <img src="img/file_type_js_official.svg" class="icon"></img></a></li>
-                <li><a href="#med">Morphine Equivalent Dose <img src="img/file_type_js_official.svg" class="icon"></img></a></li>
-		            <li><a href="#statins">Statin Equivalency <img src="img/file_type_js_official.svg" class="icon"></img></a></li>
+			          <li><a href="#pdc">PDC Calculator <img src="img/file_type_js_official.svg" class="icon"></img></a></li>
+                <li><a href="#med">Morphine Milligram Equivalents Calculator <img src="img/file_type_js_official.svg" class="icon"></img></a></li>
+		            <li><a href="#statins">Statin Conversion Dosing Calculator <img src="img/file_type_js_official.svg" class="icon"></img></a></li>
                 <li><a href="#icd10">ICD-10 Explorer <img src="img/file_type_js_official.svg" class="icon"></img></a></li>
+                <li><a href="#cql-camp">CQL Runner <img src="img/cql-logo.png" class="icon"></img></a></li>
                 <li class="divider"></li>
                 <li class="dropdown-header">Tutorials</li>
                 <li><a href="#risk-adj">Risk Adjustment <img src="img/file_type_python.svg" class="icon"></img></a></li>
@@ -121,7 +129,7 @@
                 <li><a href="#mat">Measure Authoring Tool <img src="img/cql-logo.png" class="icon"></img></a></li>
                 <li class="divider"></li>
                 <li class="dropdown-header">Other</li>
-                <li><a href="#stars-trends">Stars Trends</a></li>
+                <!--<li><a href="#stars-trends">Stars Trends</a></li>-->
                 <li><a href="#measures">Measures</a></li>
                 <li><a href="#dashboard">Dashboard</a></li>
 				<li><a href="#trends">Trends</a></li>

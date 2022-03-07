@@ -46,6 +46,9 @@ routes.config (['$routeProvider',
     when('/stars-trends', {
 		templateUrl: '/partials/stars-trends.html'
 	  }).
+    when('/cql-camp', {
+		templateUrl: '/partials/cql-camp.html'
+	  }).
 	  when('/google2cab125c9ebd6b0b.html', {
 		templateUrl: '/google2cab125c9ebd6b0b.html'
 	  }).
