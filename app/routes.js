@@ -43,8 +43,8 @@ routes.config (['$routeProvider',
     when('/mat', {
 		templateUrl: '/partials/mat.html'
 	  }).
-    when('/stars-trends', {
-		templateUrl: '/partials/stars-trends.html'
+    when('/star-ratings-trends', {
+		templateUrl: '/partials/star-ratings-trends.html'
 	  }).
     when('/cql-camp', {
 		templateUrl: '/partials/cql-camp.html'
